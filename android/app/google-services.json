@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1047043657394",
+    "firebase_url": "https://tfg-game.firebaseio.com",
+    "project_id": "tfg-game",
+    "storage_bucket": "tfg-game.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1047043657394:android:cafe0ad9188ed8a067c3ab",
+        "android_client_info": {
+          "package_name": "com.example.Game"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1047043657394-onfi2jk0oom18dr9dt0ncqq7qqvjvk36.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAkz9FHqacy-HmWjc8kaloDN_EniYN9ghA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1047043657394-onfi2jk0oom18dr9dt0ncqq7qqvjvk36.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1047043657394-uis4r4v4ndmo0sbi8tosqnd0dldlcn51.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.game"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
