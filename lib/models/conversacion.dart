@@ -1,12 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Conversacion{
-  final String idTooBook;
+  final String idConversacion;
   final String para;
   final bool esGrupo;
 
-  Conversacion({this.idTooBook,this.para,this.esGrupo});
+  Conversacion({this.idConversacion,this.para,this.esGrupo});
 
-  Conversacion.fromJson(Map<String, dynamic> m):
-    idTooBook = m['idTooBook'],
-    para = m['para'],
-    esGrupo = m['esGrupo'];
+  Conversacion.fromSnapshot(DocumentSnapshot snapshot):
+      idConversacion = snapshot.documentID,
+      para = snapshot['para'],
+      esGrupo = snapshot['esGrupo'];
 }

@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:game/blocs/bloc_descrubre/descubre_event.dart';
 import 'package:game/blocs/bloc_descrubre/descubre_state.dart';
 import 'package:game/models/tooBook.dart';
-import 'package:game/repositorio.dart';
+import 'package:game/repositorio.dart' as db;
 import 'package:bloc/bloc.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -36,9 +36,9 @@ class DescubreBloc extends Bloc<DescubreEvent,DescubreState>{
           List<TooBook> recientes;
           List<TooBook> top;
           List<TooBook> autores;
-          recientes = await Repositorio.fetchRecientes();
-          top = await Repositorio.fetchTop();
-          autores = await Repositorio.fetchAutores();
+          recientes = await db.fetchRecientes();
+          top = await db.fetchTop();
+          autores = await db.fetchAutores();
           yield 
             DescubreCargado(
               recientes: recientes,

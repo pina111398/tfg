@@ -1,27 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:game/models/conversacion.dart';
 import 'package:game/models/mensaje.dart';
+import 'package:game/models/tooBook.dart';
 import 'package:game/pages/home/chat.dart';
+import 'package:game/repositorio.dart' as db;
 
 class Conversaciones extends StatefulWidget {
-  final String idConversacion;
+  final TooBook tooBook;
 
-  Conversaciones({this.idConversacion});
+  Conversaciones({this.tooBook});
   @override
   _ConversacionesState createState() => _ConversacionesState();
 }
 
 class _ConversacionesState extends State<Conversaciones> {
-
-  String idTooBook = "";
   
-  List<Conversacion> conversaciones;
+  List<Conversacion> conversaciones = [];
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    conversaciones = _getConversaciones();
+    _getConversaciones();
   }
   
   @override
@@ -30,7 +30,7 @@ class _ConversacionesState extends State<Conversaciones> {
       Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
-          title: Text(widget.idConversacion),
+          title: Text(widget.tooBook.titulo),
           actions: <Widget>[
             Padding(
               padding: const EdgeInsets.only(right: 20),
@@ -38,7 +38,7 @@ class _ConversacionesState extends State<Conversaciones> {
             )
           ],
         ),
-        body: 
+        body: conversaciones.length != 0 ?
             ListView.builder(
               itemBuilder: (BuildContext ctx, int index){
                 return InkWell(
@@ -57,7 +57,7 @@ class _ConversacionesState extends State<Conversaciones> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text(conversaciones[index].para,style: TextStyle(fontWeight: FontWeight.bold),),
-                            Text(conversaciones[index].idTooBook),
+                            Text(conversaciones[index].esGrupo.toString()),
                           ],
                         ),
                       ),
@@ -67,14 +67,15 @@ class _ConversacionesState extends State<Conversaciones> {
                 );
               },
               itemCount: conversaciones.length,
-            ),
+            )
+            :
+            Center(child: Text("Vacio"),),
       );
   }
-  List<Conversacion> _getConversaciones(){
-    List<Conversacion> conv = [];
-    conv.add(Conversacion(idTooBook: "idTooBook",para: "Pedro",esGrupo: false));
-    conv.add(Conversacion(idTooBook: "idTooBook",para: "Pepe",esGrupo: false));
-    conv.add(Conversacion(idTooBook: "idTooBook",para: "Grupo de amigos",esGrupo: true));
-    return conv;
+  _getConversaciones() async{
+    List<Conversacion> conv = await db.fetchChats(widget.tooBook.idToobook);
+    setState(() {
+      conversaciones = conv;
+    });
   }
 }

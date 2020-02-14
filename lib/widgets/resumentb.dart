@@ -20,7 +20,7 @@ class ResuTB extends StatelessWidget {
     return InkWell(
       onTap: (){
         Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => Conversaciones(idConversacion: toobook.idToobook,)
+        builder: (context) => Conversaciones(tooBook: toobook,)
       ));
       },
       child: Padding(

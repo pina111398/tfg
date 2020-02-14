@@ -25,7 +25,7 @@ class ResumenTBCard extends StatelessWidget {
         child: 
           InkWell(
             onTap: (){
-              Navigator.push(context,new MaterialPageRoute(builder: (context) => Conversaciones(idConversacion: "id dslhkfew34",) ));
+              //Navigator.push(context,new MaterialPageRoute(builder: (context) => Conversaciones(idTooBook: "id dslhkfew34",) ));
             },
             child: Padding(
               padding: const EdgeInsets.only(left: 8.0,right: 8.0,bottom: 8.0),

@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:game/blocs/bloc_misToobooks/misTB_event.dart';
 import 'package:game/blocs/bloc_misToobooks/misTB_state.dart';
 import 'package:game/models/tooBook.dart';
-import 'package:game/repositorio.dart';
+import 'package:game/repositorio.dart' as db;
 import 'package:bloc/bloc.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -33,12 +33,9 @@ class MisTBBloc extends Bloc<MisTBEvent,MisTBState>{
       try{
         if (currentState is MisTBSinInicializar){
           List<TooBook> misTB;
-          misTB = await Repositorio.fetchRecientes();
+          misTB = await db.fetchMisTooBooks("WFBLXFkbQ3Z2hQD8TnPBAjiBZO52");
           yield 
-            MisTBCargado(
-              misTB: misTB,
-            );
-          return;
+            MisTBCargado(misTB: misTB,);
         }
       }
       catch(_){
