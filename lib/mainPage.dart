@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:game/pages/createTB.dart';
+import 'package:game/pages/crearTooBook/writeTooBook.dart';
 import 'package:game/pages/home/home.dart';
 import 'package:game/pages/perfil.dart';
 import 'package:game/pages/search.dart';
@@ -35,8 +35,8 @@ class _MainPageState extends State<MainPage>{
             index: _currentIndex,
             children: <Widget>[
               Search(uid: widget.uid),
-              HomePage(),
-              CreateTB(uid: widget.uid),
+              HomePage(uid: widget.uid),
+              WriteTB(uid: widget.uid),
               Perfil()
             ],
           ),

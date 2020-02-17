@@ -10,26 +10,25 @@ import 'package:game/models/mensaje.dart';
 class Chat extends StatefulWidget {
 
   final Conversacion conversacion;
+  final String toobookId;
 
-  const Chat({this.conversacion});
+  const Chat({this.conversacion,this.toobookId});
   @override
   _ChatState createState() => _ChatState();
 }
 
 class _ChatState extends State<Chat>{
   
-  _ChatState(){
-    _scrollController.addListener(_onScroll);
-    //Inicializo la lista de mensajes nada mas crear el homepage
-    _postBloc.dispatch(Fetch());
-  }
-  final MensajeBloc _postBloc = MensajeBloc();
+  MensajeBloc _postBloc;
   final _scrollController = ScrollController();
   final _scrollUmbral = 200.0;
   
   List<Mensaje> mensajes;
   @override
   void initState() {
+    _postBloc = MensajeBloc(toobookId: widget.toobookId, chatId: widget.conversacion.idConversacion);
+    _postBloc.dispatch(Fetch());
+    _scrollController.addListener(_onScroll);
     // TODO: implement initState
     super.initState();
   }

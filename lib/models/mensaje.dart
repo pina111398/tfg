@@ -1,16 +1,25 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Mensaje{
   final String idConversacion;
-  final String quien;
+  final String nombre;
   final String tipo;
   final String text;
   final bool yo;
 
-  Mensaje({this.idConversacion,this.quien,this.tipo,this.text,this.yo});
+  Mensaje({this.idConversacion,this.nombre,this.tipo,this.text,this.yo});
 
   Mensaje.fromJson(Map<String, dynamic> m):
     idConversacion = m['idConversacion'],
-    quien = m['quien'],
+    nombre = m['nombre'],
     tipo = m['tipo'],
-    text = m['text'],
+    text = m['texto'],
     yo = m['yo'];
+
+  Mensaje.fromSnapshot(DocumentSnapshot snapshot):
+    idConversacion = snapshot['idConversacion'],
+    nombre = snapshot['nombre'],
+    tipo = snapshot['tipo'],
+    text = snapshot['texto'],
+    yo = snapshot['yo'];
 }

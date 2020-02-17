@@ -46,7 +46,7 @@ class MensajeUI extends StatelessWidget {
                       crossAxisAlignment:
                           mensaje.yo ? CrossAxisAlignment.end : CrossAxisAlignment.start,
                       children: <Widget>[
-                        esGrupo ? Text(mensaje.quien,style: TextStyle(fontWeight: FontWeight.bold),) : Container(width: 0,),
+                        esGrupo ? Text(mensaje.nombre,style: TextStyle(fontWeight: FontWeight.bold),) : Container(width: 0,),
                         //SI EL MENSAJE ES DE TIPO TEXTO LO MAQUETO COMO TEXTO
                         mensaje.tipo == "texto" ?
                           Text(

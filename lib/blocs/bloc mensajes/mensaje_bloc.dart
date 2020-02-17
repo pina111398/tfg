@@ -12,6 +12,10 @@ import 'mensajes_state.dart';
 
 class MensajeBloc extends Bloc<MensajeEvent,MensajeState>{
 
+  final String toobookId;
+  final String chatId;
+  MensajeBloc({this.toobookId,this.chatId});
+
 //Para no saturar la api de peticiones hasta que llega la primera
   @override
   Stream<MensajeState> transform(
@@ -35,7 +39,7 @@ class MensajeBloc extends Bloc<MensajeEvent,MensajeState>{
       try{
         if (currentState is MensajeSinInicializar){
           List<Mensaje> mensaje;
-          mensaje = await db.fetchMensajes(0,50);
+          mensaje = await db.fetchMensajes(toobookId,chatId,0,50);
           yield mensaje.length < 50 
             ? MensajeCargado(
               mensajes: mensaje,
@@ -48,7 +52,7 @@ class MensajeBloc extends Bloc<MensajeEvent,MensajeState>{
           return;
         }
         if(currentState is MensajeCargado){
-          final mensaje = await db.fetchMensajes((currentState as MensajeCargado).mensajes.length,50);
+          final mensaje = await db.fetchMensajes(toobookId,chatId,(currentState as MensajeCargado).mensajes.length,50);
           yield mensaje.isEmpty 
             ?(currentState as MensajeCargado).copyWith(hasReachedMax: true)
             : mensaje.length<50
@@ -70,7 +74,7 @@ class MensajeBloc extends Bloc<MensajeEvent,MensajeState>{
       try{
         if(currentState is MensajeCargado){
           List<Mensaje> mensaje;
-          mensaje = await db.fetchMensajes(0,50);
+          mensaje = await db.fetchMensajes(toobookId,chatId,0,50);
           yield mensaje.length < 50 
             ? MensajeCargado(
               mensajes: mensaje,

@@ -10,6 +10,9 @@ import 'package:rxdart/rxdart.dart';
 
 class MisTBBloc extends Bloc<MisTBEvent,MisTBState>{
 
+  final String userId;
+  MisTBBloc({this.userId});
+
 //Para no saturar el server de peticiones hasta que llega la primera
   @override
   Stream<MisTBState> transform(
@@ -33,7 +36,7 @@ class MisTBBloc extends Bloc<MisTBEvent,MisTBState>{
       try{
         if (currentState is MisTBSinInicializar){
           List<TooBook> misTB;
-          misTB = await db.fetchMisTooBooks("WFBLXFkbQ3Z2hQD8TnPBAjiBZO52");
+          misTB = await db.fetchMisTooBooks(userId);
           yield 
             MisTBCargado(misTB: misTB,);
         }

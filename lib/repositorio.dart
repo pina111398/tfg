@@ -43,18 +43,47 @@ import 'package:game/models/tooBook.dart';
     return lista;
   }
 
-  Future<List<Mensaje>> fetchMensajes(startIndex,limit) async{
+  Future<List<Mensaje>> fetchMensajes(tooBookId,chatId,startIndex,limit) async{
     List<Mensaje> lista = [];
-    for (int i =0; i < 48; i++){
+    /*for (int i =0; i < 48; i++){
       if(i % 2 == 0)
-        lista.add(Mensaje(idConversacion: "idConver", quien: "kike", text: "Texto con startIndex: $startIndex y limite en $limit ",tipo: "texto",yo:true));
+        lista.add(Mensaje(idConversacion: "idConver", nombre: "kike", text: "Texto con startIndex: $startIndex y limite en $limit ",tipo: "texto",yo:true));
       else
-        lista.add(Mensaje(idConversacion: "idConver", quien: "pedro", text: "Texto con startIndex: $startIndex y limite en $limit ",tipo: "texto",yo:false));
+        lista.add(Mensaje(idConversacion: "idConver", nombre: "pedro", text: "Texto con startIndex: $startIndex y limite en $limit ",tipo: "texto",yo:false));
 
     }
-    lista.add(Mensaje(idConversacion: "idConver", quien: "kike", text: "https://blog.hubspot.com/hubfs/image8-2.jpg",tipo: "foto",yo: true));
-    lista.add(Mensaje(idConversacion: "idConver", quien: "pedro", text: "Pepe",tipo: "referencia",yo: false));
+    lista.add(Mensaje(idConversacion: "idConver", nombre: "kike", text: "https://blog.hubspot.com/hubfs/image8-2.jpg",tipo: "foto",yo: true));
+    lista.add(Mensaje(idConversacion: "idConver", nombre: "pedro", text: "Pepe",tipo: "referencia",yo: false));*/
+    await databaseReference
+        .collection("toobooks/$tooBookId/chats/$chatId/mensajes/")
+        .getDocuments()
+        .then((QuerySnapshot snapshot) {
+      snapshot.documents.forEach((f) => 
+      lista.add(Mensaje.fromSnapshot(f)));
+    });
     return lista;
+  }
+
+  Future<String> addTooBook(userId,titulo) async{
+    final doc = await databaseReference
+    .collection("toobooks")
+    .add({
+      "autor": "prueba",
+      "idAutor": userId,
+      "sinopsis": "Sinopsis de prueba",
+      "fecha": "12/12/2020",
+      "titulo" : titulo
+    });
+    return doc.documentID;
+  }
+  Future<String> addChatToTooBook(esGrupo,para,tooBookId) async{
+    final doc = await databaseReference
+    .collection("toobooks/$tooBookId/chats")
+    .add({
+      "esGrupo": esGrupo,
+      "para": para,
+    });
+    return doc.documentID;
   }
 
   Future<List<TooBook>> fetchRecientes() async{

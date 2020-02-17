@@ -45,7 +45,7 @@ class _ConversacionesState extends State<Conversaciones> {
                   onTap: () async {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Chat(conversacion: conversaciones[index])),
+                      MaterialPageRoute(builder: (context) => Chat(toobookId: widget.tooBook.idToobook,conversacion: conversaciones[index])),
                     );
                   },
                   child: Column(

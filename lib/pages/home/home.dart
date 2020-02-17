@@ -9,16 +9,20 @@ import 'package:shimmer/shimmer.dart';
 import 'package:game/widgets/resumentb.dart';
 
 class HomePage extends StatefulWidget {
+
+  HomePage({Key key,this.uid}) : super(key: key);
+
+  final String uid;
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
 
-  final MisTBBloc _misTBBloc = MisTBBloc();
-
+  MisTBBloc _misTBBloc;
   @override
   void initState() {
+    _misTBBloc = MisTBBloc(userId: widget.uid);
     // TODO: implement initState
     _misTBBloc.dispatch(Fetch());
   }
