@@ -10,5 +10,5 @@ class Conversacion{
   Conversacion.fromSnapshot(DocumentSnapshot snapshot):
       idConversacion = snapshot.documentID,
       para = snapshot['para'],
-      esGrupo = snapshot['esGrupo'];
+      esGrupo = snapshot['esGrupo'] == true;
 }

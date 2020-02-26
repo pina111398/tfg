@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:game/models/conversacion.dart';
 import 'package:game/pages/crearTooBook/WriteMessages.dart';
 import 'package:game/repositorio.dart' as db;
 
@@ -43,15 +44,17 @@ class _WriteChatsTBState extends State<WriteChatsTB> {
                   return snapshot.data.documents.length != 0
                       ? ListView.builder(
                           itemBuilder: (BuildContext ctx, int index) {
+                            Conversacion documento = Conversacion.fromSnapshot(
+                                snapshot.data.documents[index]);
                             return InkWell(
                               onTap: () {
                                 Navigator.push(
                                     context,
                                     new MaterialPageRoute(
                                         builder: (context) => PantallaMensajes(
-                                              nombre: snapshot.data.documents[index]['para'],
+                                              conversacion: documento,
                                               idTooBook: widget.tooBookId,
-                                              idChat: snapshot.data.documents[index].documentID,
+                                              idChat: documento.idConversacion,
                                             )));
                               },
                               child: Column(
@@ -64,7 +67,7 @@ class _WriteChatsTBState extends State<WriteChatsTB> {
                                           CrossAxisAlignment.start,
                                       children: <Widget>[
                                         Text(
-                                          snapshot.data.documents[index]['para'],
+                                          documento.para,
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold),
                                         ),
@@ -187,7 +190,7 @@ class __ChatDialogState extends State<_ChatDialog> {
                                     context,
                                     new MaterialPageRoute(
                                         builder: (context) => PantallaMensajes(
-                                              nombre: controladorNombre.text,
+                                              conversacion: Conversacion(idConversacion: documentId,para: controladorNombre.text,esGrupo: grupo),
                                               idTooBook: widget.tooBookId,
                                               idChat: documentId,
                                             )))
