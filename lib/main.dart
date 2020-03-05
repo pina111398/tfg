@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:game/pages/home/infoTooBook.dart';
+import 'package:game/pages/perfil/ajustes.dart';
 import 'package:provider/provider.dart';
 import 'mainPage.dart';
 import 'inicioSesion/loginPage.dart';
@@ -25,6 +27,8 @@ class MyApp extends StatelessWidget {
                   '/home': (BuildContext context) => MainPage(),
                   '/login': (BuildContext context) => LoginPage(),
                   '/register': (BuildContext context) => RegisterPage(),
+                  '/ajustes': (BuildContext context) => Ajustes(),
+                  '/infoTooBook': (BuildContext context) => InfoTooBook(),
                 }
               );
             } ,

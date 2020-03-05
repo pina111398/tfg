@@ -41,77 +41,81 @@ class _WriteChatsTBState extends State<WriteChatsTB> {
                 case ConnectionState.waiting:
                   return Container();
                 default:
-                  return snapshot.data.documents.length != 0
-                      ? ListView.builder(
-                          itemBuilder: (BuildContext ctx, int index) {
-                            Conversacion documento = Conversacion.fromSnapshot(
-                                snapshot.data.documents[index]);
-                            return InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    new MaterialPageRoute(
-                                        builder: (context) => PantallaMensajes(
-                                              conversacion: documento,
-                                              idTooBook: widget.tooBookId,
-                                              idChat: documento.idConversacion,
-                                            )));
-                              },
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.all(20.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: <Widget>[
-                                        Text(
-                                          documento.para,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Divider(
-                                    height: 5,
-                                  )
-                                ],
-                              ),
-                            );
-                          },
-                          itemCount: snapshot.data.documents.length,
-                        )
-                      : ListTile(
-                          title: Text("Crea un chat",
-                              style: TextStyle(fontSize: 20)),
-                          trailing: Icon(Icons.add),
+                  if (snapshot.data.documents.length != 0) {
+                    return ListView.builder(
+                      itemBuilder: (BuildContext ctx, int index) {
+                        Conversacion documento = Conversacion.fromSnapshot(
+                            snapshot.data.documents[index]);
+                        return InkWell(
                           onTap: () {
-                            showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return _ChatDialog(
-                                      grupo: _esGrupo,
-                                      tooBookId: widget.tooBookId);
-                                });
+                            !documento.esGrupo ? 
+                              Navigator.push(
+                                  context,
+                                  new MaterialPageRoute(
+                                      builder: (context) => PantallaMensajes(
+                                          conversacion: documento,
+                                          idTooBook: widget.tooBookId,
+                                          idChat: documento.idConversacion,
+                                          personajes: ["Yo",documento.para])))
+                            :
+                            db.fetchPersonajes(widget.tooBookId,documento.idConversacion).then((listaPersonajes){
+                              listaPersonajes.add("Yo");
+                              Navigator.push(
+                                  context,
+                                  new MaterialPageRoute(
+                                      builder: (context) => PantallaMensajes(
+                                          conversacion: documento,
+                                          idTooBook: widget.tooBookId,
+                                          idChat: documento.idConversacion,
+                                          personajes: listaPersonajes))); 
+                            });
                           },
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.all(20.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      documento.para,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Divider(
+                                height: 5,
+                              )
+                            ],
+                          ),
                         );
+                      },
+                      itemCount: snapshot.data.documents.length,
+                    );
+                  } else
+                    return Center(
+                        child: Text("No has escrito ningun chat todavia"));
               }
             },
           ),
         ),
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {
-            showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return _ChatDialog(
-                      grupo: _esGrupo, tooBookId: widget.tooBookId);
-                });
-          },
-          icon: Icon(Icons.add),
-          label: Text("Crear chat"),
+        floatingActionButton: Padding(
+          padding: EdgeInsets.only(bottom: 30),
+          child: FloatingActionButton.extended(
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return _ChatDialog(
+                        grupo: _esGrupo, tooBookId: widget.tooBookId);
+                  });
+            },
+            icon: Icon(Icons.add),
+            label: Text("Crear chat"),
+          ),
         ));
   }
 }
@@ -183,17 +187,10 @@ class __ChatDialogState extends State<_ChatDialog> {
                   onPressed: () {
                     if (_formKey.currentState.validate()) {
                       db
-                          .addChatToTooBook(grupo.toString(),
+                          .addChatToTooBook(grupo,
                               controladorNombre.text, widget.tooBookId)
                           .then((documentId) => {
-                                Navigator.push(
-                                    context,
-                                    new MaterialPageRoute(
-                                        builder: (context) => PantallaMensajes(
-                                              conversacion: Conversacion(idConversacion: documentId,para: controladorNombre.text,esGrupo: grupo),
-                                              idTooBook: widget.tooBookId,
-                                              idChat: documentId,
-                                            )))
+                                Navigator.pop(context)
                               });
                     }
                   },

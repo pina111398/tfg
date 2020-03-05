@@ -39,8 +39,8 @@ class MensajeBloc extends Bloc<MensajeEvent,MensajeState>{
       try{
         if (currentState is MensajeSinInicializar){
           List<Mensaje> mensaje;
-          mensaje = await db.fetchMensajes(toobookId,chatId,0,50);
-          yield mensaje.length < 50 
+          mensaje = await db.fetchMensajes(toobookId,chatId,0,10);
+          yield mensaje.length < 10 
             ? MensajeCargado(
               mensajes: mensaje,
               hasReachedMax: true,
@@ -64,27 +64,6 @@ class MensajeBloc extends Bloc<MensajeEvent,MensajeState>{
                 mensajes: (currentState as MensajeCargado).mensajes + mensaje,
                 hasReachedMax: false,
               );
-        }
-      }
-      catch(_){
-        yield MensajeError();
-      }
-    }
-    if (event is Refresh){
-      try{
-        if(currentState is MensajeCargado){
-          List<Mensaje> mensaje;
-          mensaje = await db.fetchMensajes(toobookId,chatId,0,50);
-          yield mensaje.length < 50 
-            ? MensajeCargado(
-              mensajes: mensaje,
-              hasReachedMax: true,
-            )
-            :MensajeCargado(
-              mensajes: mensaje,
-              hasReachedMax: false,
-            );
-          return;
         }
       }
       catch(_){

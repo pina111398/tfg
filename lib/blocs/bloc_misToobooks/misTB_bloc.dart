@@ -45,6 +45,20 @@ class MisTBBloc extends Bloc<MisTBEvent,MisTBState>{
         yield MisTBError();
       }
     }
+
+    if (event is Refresh){
+      try{
+        if(currentState is MisTBCargado){
+          List<TooBook> misTB;
+          misTB = await db.fetchMisTooBooks(userId);
+          yield 
+            MisTBCargado(misTB: misTB,);
+        }
+      }
+      catch(_){
+        yield MisTBError();
+      }
+    }
   }
 
 }

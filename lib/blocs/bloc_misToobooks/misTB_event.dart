@@ -9,3 +9,11 @@ class Fetch extends MisTBEvent{
     return 'Fetch';
   }
 }
+
+class Refresh extends MisTBEvent{
+  @override
+  String toString() {
+    // TODO: implement toString
+    return 'Refresh';
+  }
+}

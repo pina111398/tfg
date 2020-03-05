@@ -20,7 +20,6 @@ class _WriteTBState extends State<WriteTB> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.white,
           centerTitle: true,
           title: Text("Escribe un TooBook"),
         ),

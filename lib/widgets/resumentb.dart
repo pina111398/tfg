@@ -3,51 +3,62 @@ import 'package:game/models/tooBook.dart';
 import 'package:game/pages/home/conversaciones.dart';
 
 class ResuTB extends StatelessWidget {
-
   final TooBook toobook;
-  String firstHalf;
+  final String uid;
 
-  ResuTB({this.toobook}){
-    if (toobook.sinopsis.length > 150) {
-      firstHalf = toobook.sinopsis.substring(0, 150) + "...";
-    } else {
-      firstHalf = toobook.sinopsis;
-    }
-  }
+  ResuTB({this.toobook,this.uid});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: (){
+      onTap: () {
         Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => Conversaciones(tooBook: toobook,)
-      ));
+            builder: (context) => Conversaciones(
+                  tooBook: toobook,
+                  uid: uid,
+                )));
       },
-      child: Padding(
-        padding: const EdgeInsets.only(left: 8.0,right: 8.0,bottom: 8.0),
-        child: 
-          ListTile(
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(toobook.titulo,style: TextStyle(fontWeight: FontWeight.bold),),
-                Text(toobook.fecha)  
-              ],
+      child: ConstrainedBox(
+          constraints: new BoxConstraints(
+            minHeight: 10.0,
+            maxHeight: 150.0,
+          ),
+          child: ListTile(
+            title: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(
+                    toobook.titulo,
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  Text(toobook.fecha)
+                ],
+              ),
             ),
             subtitle: Column(
+              mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                Text(toobook.sinopsis),
+                Flexible(
+                  child: RichText(
+                    overflow: TextOverflow.clip,
+                    strutStyle: StrutStyle(fontSize: 12.0),
+                    text: TextSpan(
+                        style: TextStyle(color: Colors.black),
+                        text: toobook.sinopsis),
+                  ),
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    Text(toobook.autor)
-                  ],
-                )
+                  children: <Widget>[Text(toobook.autor)],
+                ),
+                Divider(height: 0,)
               ],
-            )
-
+            ),
           ),
         ),
+      
     );
   }
 }

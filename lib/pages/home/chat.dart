@@ -41,12 +41,7 @@ class _ChatState extends State<Chat>{
         leading: IconButton(icon:Icon(Icons.arrow_back),
           onPressed:() => Navigator.pop(context),
         ),
-        backgroundColor: Colors.white,
         title: Text(widget.conversacion.para),
-        actions: <Widget>[
-          IconButton(icon: Icon(Icons.replay),onPressed: (){setState(() {
-          });},)
-        ],
       ),
       body:
         SafeArea(
@@ -89,7 +84,7 @@ class _ChatState extends State<Chat>{
     final maxScroll = _scrollController.position.maxScrollExtent;
     final currentScroll = _scrollController.position.pixels;
     if (maxScroll - currentScroll <= _scrollUmbral) {
-      _postBloc.dispatch(Fetch());
+      //_postBloc.dispatch(Fetch());
     }
   }
 }

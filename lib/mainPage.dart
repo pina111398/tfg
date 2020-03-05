@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:game/pages/crearTooBook/writeTooBook.dart';
 import 'package:game/pages/home/home.dart';
-import 'package:game/pages/perfil.dart';
+import 'package:game/pages/perfil/perfil.dart';
 import 'package:game/pages/search.dart';
 import 'package:game/theme.dart';
 import 'package:provider/provider.dart';
