@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:game/models/mensaje.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 
 class MensajeUI extends StatelessWidget {
   final Mensaje mensaje;
@@ -61,17 +62,21 @@ class MensajeUI extends StatelessWidget {
                                 ),
                           //SI EL MENSAJE ES DE TIPO TEXTO LO MAQUETO COMO TEXTO
                           mensaje.tipo == "texto"
-                              ? Text(
-                                  mensaje.text,
-                                  textAlign: mensaje.yo
-                                      ? TextAlign.end
-                                      : TextAlign.start,
-                                )
+                              ? Linkify(
+                                  onOpen: (link) async {
+                                    if (await canLaunch(link.url)) {
+                                        await launch(link.url);
+                                      } else {
+                                        throw 'Could not launch $link';
+                                      }
+                                  },
+                                  text: mensaje.text,
+                                  textAlign: TextAlign.start,
+                                  linkStyle: TextStyle(color: Colors.blue),
+                                ) 
                               : mensaje.tipo == "foto"
                                   ? _montaFoto(mensaje)
-                                  : mensaje.tipo == "url"
-                                    ? _montaUrl(mensaje.text)
-                                    : Container()
+                                  : Container()
                         ],
                       ),
                     ),

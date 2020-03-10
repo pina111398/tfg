@@ -65,13 +65,13 @@ class _ChatState extends State<Chat>{
                 return 
                 ListView.builder(
                     itemBuilder: (BuildContext context, int index) {
-                      return index >= state.mensajes.length
-                          ? BottomLoader()
-                          : MensajeUI(mensaje: state.mensajes[index],esGrupo: widget.conversacion.esGrupo,);
+                      return //index >= state.mensajes.length
+                          //? BottomLoader()
+                          /*:*/ MensajeUI(mensaje: state.mensajes[index],esGrupo: widget.conversacion.esGrupo,);
                     },
-                    itemCount: state.hasReachedMax
-                      ? state.mensajes.length
-                      : state.mensajes.length + 1,
+                    itemCount: //state.hasReachedMax
+                      /*?*/ state.mensajes.length,
+                      //: state.mensajes.length + 1,
                     controller: _scrollController,              
                 );
               }

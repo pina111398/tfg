@@ -22,19 +22,16 @@ class DescubreError extends DescubreState{
 class DescubreCargado extends DescubreState{
   final List<TooBook> recientes;
   final List<TooBook> top;
-  final List<TooBook> autores;
   DescubreCargado({
     this.recientes,
     this.top,
-    this.autores,
-  }):super([recientes,top,autores]);
+  }):super([recientes,top]);
 
   DescubreCargado copyWith({
   final List<TooBook> recientes,
   final List<TooBook> top,
-  final List<TooBook> autores,
   }) {
-    return DescubreCargado(recientes: recientes ?? this.recientes,top: top ?? this.top,autores: autores ?? this.autores);
+    return DescubreCargado(recientes: recientes ?? this.recientes,top: top ?? this.top);
   }
   @override
   String toString() {

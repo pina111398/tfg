@@ -86,7 +86,7 @@ class _SearchState extends State<Search> {
                               }
                               if (state is DescubreCargado) {
                                 return _montaUI(
-                                    state.top, state.recientes, state.autores);
+                                    state.top, state.recientes);
                               }
                             },
                           )
@@ -108,7 +108,7 @@ class _SearchState extends State<Search> {
                                     itemBuilder: (BuildContext ctx, int index) {
                                       return Column(
                                         children: <Widget>[
-                                          ResuTB(toobook: TooBook.fromSnapshot(snapshot.data.documents[index]),),
+                                          ResuTB(toobook: TooBook.fromSnapshot(snapshot.data.documents[index]),uid: widget.uid,),
                                           Divider()
                                         ],
                                       );
@@ -124,7 +124,7 @@ class _SearchState extends State<Search> {
             })));
   }
 
-  _montaUI(List<TooBook> top, List<TooBook> recientes, List<TooBook> autores) {
+  _montaUI(List<TooBook> top, List<TooBook> recientes) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 16, 0, 0),
       child: Column(

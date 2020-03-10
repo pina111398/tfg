@@ -40,7 +40,7 @@ class ResumenTBCard extends StatelessWidget {
                           toobook.titulo,
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        Text(toobook.fecha)
+                        Text(toobook.fecha.substring(0,10))
                       ],
                     ),
                     Container(

@@ -44,6 +44,7 @@ class _ConversacionesState extends State<Conversaciones> {
                   child: cargandoLeyendo
                       ? Container(
                           height: 12,
+                          width: 12,
                           child: CircularProgressIndicator(
                             backgroundColor: Colors.blue,
                           ),
@@ -51,14 +52,14 @@ class _ConversacionesState extends State<Conversaciones> {
                       : estaLeyendo
                           ? IconButton(
                               icon: Icon(
-                                Icons.favorite,
+                                Icons.bookmark,
                                 color: Colors.red,
                               ),
                               onPressed: () {
                                 _quitarLeyendo();
                               })
                           : IconButton(
-                              icon: Icon(Icons.favorite_border),
+                              icon: Icon(Icons.bookmark_border),
                               onPressed: () {
                                 _anadirLeyendo();
                               })),

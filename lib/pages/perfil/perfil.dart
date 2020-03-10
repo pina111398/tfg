@@ -1,7 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:game/models/usuario.dart';
 import 'package:provider/provider.dart';
-
+import 'package:game/repositorio.dart' as db;
 import 'package:game/theme.dart';
 
 class Perfil extends StatefulWidget {
@@ -13,6 +14,19 @@ class Perfil extends StatefulWidget {
 }
 
 class _PerfilState extends State<Perfil> {
+  int numPublicaciones;
+  bool cargadoNumPublicaciones;
+  Usuario usuario;
+  bool cargadoUsuario;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _getNumPublicaciones(widget.uid);
+    _getdatosUsuario(widget.uid);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,12 +49,15 @@ class _PerfilState extends State<Perfil> {
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
               child: Padding(
-                padding: const EdgeInsets.only(left: 16.0, right: 8.0,bottom: 8),
-                child: Row(
+                padding:
+                    const EdgeInsets.only(left: 16.0, right: 8.0, bottom: 8),
+                child: 
+                cargadoUsuario ? 
+                Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     CircleAvatar(
-                      radius: 70.0,
+                      radius: 50,
                       backgroundImage:
                           NetworkImage("https://via.placeholder.com/150"),
                       backgroundColor: Colors.transparent,
@@ -52,16 +69,16 @@ class _PerfilState extends State<Perfil> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            "Luis Enrique Pina",
+                            "${usuario.nombre} ${usuario.apellido}",
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            "enpihe1997@gmail.com",
+                            "${usuario.email}",
                           ),
                           Container(
                               width: 200,
                               child: Text(
-                                "Descripcion del usuario",
+                                "${usuario.descripcion} wwwwwwwwwwwww",
                                 maxLines: 5,
                                 overflow: TextOverflow.ellipsis,
                               ))
@@ -69,17 +86,44 @@ class _PerfilState extends State<Perfil> {
                       ),
                     )
                   ],
-                ),
+                )
+                :
+                Center(child:CircularProgressIndicator())
               ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                OutlineButton(child: Text("4 publicaciones"), onPressed: () {}),
-                OutlineButton(child: Text("7 leidos"), onPressed: () {})
+                OutlineButton(
+                    child: cargadoNumPublicaciones
+                        ? Text("$numPublicaciones publicaciones")
+                        : CircularProgressIndicator(),
+                    onPressed: () {}),
               ],
             )
           ],
         ));
+  }
+
+  _getNumPublicaciones(uid) async {
+    setState(() {
+      cargadoNumPublicaciones = false;
+    });
+    int numero = await db.getNumPublicaciones(uid);
+    setState(() {
+      cargadoNumPublicaciones = true;
+      numPublicaciones = numero;
+    });
+  }
+
+  _getdatosUsuario(uid)async{
+    setState(() {
+      cargadoUsuario = false;
+    });
+    Usuario user = await db.fetchdatosUsuario(uid);
+    setState(() {
+      cargadoUsuario = true;
+      usuario = user;
+    });
   }
 }

@@ -46,50 +46,70 @@ class _WriteChatsTBState extends State<WriteChatsTB> {
                       itemBuilder: (BuildContext ctx, int index) {
                         Conversacion documento = Conversacion.fromSnapshot(
                             snapshot.data.documents[index]);
-                        return InkWell(
-                          onTap: () {
-                            !documento.esGrupo ? 
-                              Navigator.push(
-                                  context,
-                                  new MaterialPageRoute(
-                                      builder: (context) => PantallaMensajes(
-                                          conversacion: documento,
-                                          idTooBook: widget.tooBookId,
-                                          idChat: documento.idConversacion,
-                                          personajes: ["Yo",documento.para])))
-                            :
-                            db.fetchPersonajes(widget.tooBookId,documento.idConversacion).then((listaPersonajes){
-                              listaPersonajes.add("Yo");
-                              Navigator.push(
-                                  context,
-                                  new MaterialPageRoute(
-                                      builder: (context) => PantallaMensajes(
-                                          conversacion: documento,
-                                          idTooBook: widget.tooBookId,
-                                          idChat: documento.idConversacion,
-                                          personajes: listaPersonajes))); 
-                            });
+                        return Dismissible(
+                          key: Key(snapshot.data.documents[index].documentID),
+                          background: widgetDelete(),
+                          direction: DismissDirection.endToStart,
+                          onDismissed: (direction)async{
+                            await db.eliminaChat(snapshot.data.documents[index].documentID,widget.tooBookId);
                           },
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.all(20.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text(
-                                      documento.para,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
+                          child: InkWell(
+                            onTap: () {
+                              !documento.esGrupo
+                                  ? Navigator.push(
+                                      context,
+                                      new MaterialPageRoute(
+                                          builder: (context) =>
+                                              PantallaMensajes(
+                                                  conversacion: documento,
+                                                  idTooBook: widget.tooBookId,
+                                                  idChat:
+                                                      documento.idConversacion,
+                                                  personajes: [
+                                                    "Yo",
+                                                    documento.para
+                                                  ])))
+                                  : db
+                                      .fetchPersonajes(widget.tooBookId,
+                                          documento.idConversacion)
+                                      .then((listaPersonajes) {
+                                      listaPersonajes.add("Yo");
+                                      Navigator.push(
+                                          context,
+                                          new MaterialPageRoute(
+                                              builder: (context) =>
+                                                  PantallaMensajes(
+                                                      conversacion: documento,
+                                                      idTooBook:
+                                                          widget.tooBookId,
+                                                      idChat: documento
+                                                          .idConversacion,
+                                                      personajes:
+                                                          listaPersonajes)));
+                                    });
+                            },
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.all(20.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Text(
+                                        documento.para,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              Divider(
-                                height: 5,
-                              )
-                            ],
+                                Divider(
+                                  height: 5,
+                                )
+                              ],
+                            ),
                           ),
                         );
                       },
@@ -118,6 +138,34 @@ class _WriteChatsTBState extends State<WriteChatsTB> {
           ),
         ));
   }
+  Widget widgetDelete() {
+  return Container(
+    color: Colors.red,
+    child: Align(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          Icon(
+            Icons.delete,
+            color: Colors.white,
+          ),
+          Text(
+            " Eliminar",
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w700,
+            ),
+            textAlign: TextAlign.right,
+          ),
+          SizedBox(
+            width: 20,
+          ),
+        ],
+      ),
+      alignment: Alignment.centerRight,
+    ),
+  );
+}
 }
 
 class _ChatDialog extends StatefulWidget {
@@ -187,11 +235,9 @@ class __ChatDialogState extends State<_ChatDialog> {
                   onPressed: () {
                     if (_formKey.currentState.validate()) {
                       db
-                          .addChatToTooBook(grupo,
-                              controladorNombre.text, widget.tooBookId)
-                          .then((documentId) => {
-                                Navigator.pop(context)
-                              });
+                          .addChatToTooBook(
+                              grupo, controladorNombre.text, widget.tooBookId)
+                          .then((documentId) => {Navigator.pop(context)});
                     }
                   },
                   child: Text(

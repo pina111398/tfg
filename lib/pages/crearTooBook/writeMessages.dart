@@ -1,11 +1,16 @@
+import 'dart:io';
+import 'dart:ui';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:game/WrittingMessagesProvider.dart';
 import 'package:game/models/conversacion.dart';
 import 'package:game/models/mensaje.dart';
 import 'package:game/widgets/MensajeUI.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:game/repositorio.dart' as db;
+import 'package:game/utilidades.dart' as utilidades;
 
 class PantallaMensajes extends StatefulWidget {
   final Conversacion conversacion;
@@ -27,82 +32,87 @@ class _PantallaMensajesState extends State<PantallaMensajes> {
     return ChangeNotifierProvider(
         create: (_) => WrittingNotifierMessages(widget.personajes),
         child: Scaffold(
-          appBar: new AppBar(
-            title: Text(widget.conversacion.para),
-            actions: <Widget>[
-              widget.conversacion.esGrupo
-                  ? Consumer<WrittingNotifierMessages>(
-                      builder: (_, notifier, child) {
-                      return IconButton(
-                          icon: Icon(Icons.add),
-                          onPressed: () {
-                            showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return _anadirPersonajeDialog(
-                                    widget.idTooBook,
-                                    widget.idChat,
-                                  );
-                                }).then((nombre) {
+            appBar: new AppBar(
+              title: Text(widget.conversacion.para),
+              actions: <Widget>[
+                widget.conversacion.esGrupo
+                    ? Consumer<WrittingNotifierMessages>(builder: (_, notifier, child) {
+          return  
+                    
+                    IconButton(
+                        icon: Icon(Icons.add),
+                        onPressed: () {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return _anadirPersonajeDialog(
+                                  widget.idTooBook,
+                                  widget.idChat,
+                                );
+                              }).then((nombre) {
+                            if (nombre != null)
                               notifier.togglePersonaje(nombre);
-                            });
                           });
-                    })
-                  : Container()
-            ],
-          ),
-          body: SafeArea(
-            child: Column(
-              children: <Widget>[
-                Flexible(
-                  child: StreamBuilder<QuerySnapshot>(
-                    stream: Firestore.instance
-                        .collection(
-                            "toobooks/${widget.idTooBook}/chats/${widget.idChat}/mensajes")
-                        .orderBy("fecha", descending: true)
-                        .snapshots(),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<QuerySnapshot> snapshot) {
-                      if (snapshot.hasError)
-                        return new Text('Error: ${snapshot.error}');
-                      switch (snapshot.connectionState) {
-                        case ConnectionState.waiting:
-                          return Container();
-                        default:
-                          return ListView.builder(
-                            controller: _listScrollController,
-                            reverse: true,
-                            itemBuilder: (BuildContext ctx, int index) {
-                              return GestureDetector(
-                                key: Key(
-                                    snapshot.data.documents[index].documentID),
-                                child: MensajeUI(
-                                    esGrupo: widget.conversacion.esGrupo,
-                                    mensaje: Mensaje.fromSnapshot(
-                                        snapshot.data.documents[index])),
-                                onLongPress: () {
-                                  opcionesModal(
-                                      context,
-                                      snapshot.data.documents[index].documentID,
-                                      widget.idTooBook,
-                                      widget.idChat,
-                                      Mensaje.fromSnapshot(
-                                          snapshot.data.documents[index]));
-                                },
-                              );
-                            },
-                            itemCount: snapshot.data.documents.length,
-                          );
-                      }
-                    },
-                  ),
-                ),
-                ControlesChat(
-                    idTooBook: widget.idTooBook, idChat: widget.idChat),
+                        });})
+                    : Container()
               ],
             ),
-          ),
-        ));
+            body: SafeArea(
+              child: Column(
+                children: <Widget>[
+                  Flexible(
+                    child: StreamBuilder<QuerySnapshot>(
+                      stream: Firestore.instance
+                          .collection(
+                              "toobooks/${widget.idTooBook}/chats/${widget.idChat}/mensajes")
+                          .orderBy("fecha", descending: true)
+                          .snapshots(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<QuerySnapshot> snapshot) {
+                        if (snapshot.hasError)
+                          return new Text('Error: ${snapshot.error}');
+                        switch (snapshot.connectionState) {
+                          case ConnectionState.waiting:
+                            return Container();
+                          default:
+                            return ListView.builder(
+                              controller: _listScrollController,
+                              reverse: true,
+                              itemBuilder: (BuildContext ctx, int index) {
+                                return GestureDetector(
+                                  key: Key(snapshot
+                                      .data.documents[index].documentID),
+                                  child: MensajeUI(
+                                      esGrupo: widget.conversacion.esGrupo,
+                                      mensaje: Mensaje.fromSnapshot(
+                                          snapshot.data.documents[index])),
+                                  onLongPress: () {
+                                    opcionesModal(
+                                        context,
+                                        snapshot
+                                            .data.documents[index].documentID,
+                                        widget.idTooBook,
+                                        widget.idChat,
+                                        Mensaje.fromSnapshot(
+                                            snapshot.data.documents[index]));
+                                  },
+                                );
+                              },
+                              itemCount: snapshot.data.documents.length,
+                            );
+                        }
+                      },
+                    ),
+                  ),
+                  ControlesChat(
+                    idTooBook: widget.idTooBook,
+                    idChat: widget.idChat,
+                  ),
+                ],
+              ),
+            ),
+          )
+        );
   }
 
   _anadirPersonajeDialog(idTooBook, idChat) {
@@ -111,7 +121,7 @@ class _PantallaMensajesState extends State<PantallaMensajes> {
 
     return Dialog(
       shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0)), //this right here
+          borderRadius: BorderRadius.circular(10.0)),
       child: Container(
         height: 150,
         child: Padding(
@@ -203,7 +213,9 @@ class _PantallaMensajesState extends State<PantallaMensajes> {
 }
 
 class ControlesChat extends StatelessWidget {
-  final TextEditingController textFieldController = new TextEditingController();
+
+  WrittingNotifierMessages provider;
+  TextEditingController textFieldController = new TextEditingController();
   final String idTooBook;
   final String idChat;
   ControlesChat({
@@ -248,6 +260,7 @@ class ControlesChat extends StatelessWidget {
                     ListTile(
                       title: Text('Imagen'),
                       leading: Icon(Icons.image),
+                      onTap: () => pickImage(source: ImageSource.gallery).then((_)=>Navigator.pop(context)),
                     ),
                     ListTile(
                       title: Text('Video'),
@@ -256,10 +269,6 @@ class ControlesChat extends StatelessWidget {
                     ListTile(
                       title: Text('Audio'),
                       leading: Icon(Icons.audiotrack),
-                    ),
-                    ListTile(
-                      title: Text('Url'),
-                      leading: Icon(Icons.link),
                     ),
                     ListTile(
                       title: Text('TooBook'),
@@ -273,10 +282,18 @@ class ControlesChat extends StatelessWidget {
         });
   }
 
+  Future pickImage({@required ImageSource source}) async {
+    File selectedImage = await utilidades.pickImage(source: source);
+    db.uploadImage(
+        image: selectedImage,
+        idTooBook: idTooBook,
+        idChat: idChat,
+        nombre: provider.nombre,);
+  }
+
   @override
   Widget build(BuildContext context) {
-    WrittingNotifierMessages notifier =
-        Provider.of<WrittingNotifierMessages>(context);
+    provider = Provider.of<WrittingNotifierMessages>(context);
     return Container(
       padding: EdgeInsets.all(10),
       child: Row(
@@ -295,12 +312,13 @@ class ControlesChat extends StatelessWidget {
             width: 5,
           ),
           Expanded(
-            child: TextField(
+            child: TextFormField(
               controller: textFieldController,
               onChanged: (val) {
+                print(provider.estaEscribiendo);
                 (val.length > 0 && val.trim() != "")
-                    ? notifier.toggleWritting(true)
-                    : notifier.toggleWritting(false);
+                    ? provider.toggleWritting(true)
+                    : provider.toggleWritting(false);
               },
               decoration: InputDecoration(
                 hintText: "Escribe un mensaje",
@@ -318,23 +336,23 @@ class ControlesChat extends StatelessWidget {
           SizedBox(
             width: 5,
           ),
-          notifier.estaEscribiendo
+          provider.estaEscribiendo
               ? Container()
               : PopupMenuButton(
                   child: FloatingActionButton.extended(
-                    label: Text(notifier.nombre),
+                    label: Text(provider.nombre),
                     elevation: 0,
                     backgroundColor: Colors.grey[400],
                   ),
                   itemBuilder: (_) => <PopupMenuItem<String>>[
-                        for (String personaje in notifier.personajes)
+                        for (String personaje in provider.personajes)
                           new PopupMenuItem<String>(
                               child: Text(personaje), value: personaje),
                       ],
                   onSelected: (name) {
-                    notifier.toggleName(name);
+                    provider.toggleName(name);
                   }),
-          notifier.estaEscribiendo
+          provider.estaEscribiendo
               ? Container(
                   margin: EdgeInsets.only(left: 10),
                   decoration: BoxDecoration(
@@ -349,9 +367,9 @@ class ControlesChat extends StatelessWidget {
                             idTooBook,
                             idChat,
                             textFieldController.text.toString(),
-                            notifier.nombre);
+                            provider.nombre);
                         textFieldController.clear();
-                        notifier.toggleWritting(false);
+                        provider.toggleWritting(false);
                       }))
               : Container()
         ],

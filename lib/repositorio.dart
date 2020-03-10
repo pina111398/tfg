@@ -1,10 +1,17 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
+import 'package:game/WrittingMessagesProvider.dart';
 import 'package:game/models/conversacion.dart';
 import 'package:game/models/mensaje.dart';
 import 'package:game/models/tooBook.dart';
+import 'package:game/models/usuario.dart';
 import 'package:intl/intl.dart';
 
 final databaseReference = Firestore.instance;
+StorageReference _storageReference;
 
 Future<List<TooBook>> fetchMisTooBooks(String idUser) async {
   List<String> listaIds = [];
@@ -52,11 +59,12 @@ Future<List<Mensaje>> fetchMensajes(
 }
 
 Future<String> addTooBook(userId, titulo) async {
+  print(userId);
   final doc = await databaseReference.collection("toobooks").add({
     "autor": "prueba",
     "idAutor": userId,
     "sinopsis": "Sinopsis de prueba",
-    "fecha": "12/12/2020",
+    "fecha": DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now()),
     "titulo": titulo
   });
   return doc.documentID;
@@ -95,6 +103,7 @@ Future<List<TooBook>> fetchRecientes() async {
   List<TooBook> lista = [];
   await databaseReference
       .collection("toobooks/")
+      .orderBy("fecha", descending: true)
       .getDocuments()
       .then((QuerySnapshot snapshot) {
     snapshot.documents.forEach((f) => lista.add(TooBook.fromSnapshot(f)));
@@ -111,23 +120,6 @@ Future<List<TooBook>> fetchTop() async {
     snapshot.documents.forEach((f) => lista.add(TooBook.fromSnapshot(f)));
   });
   return lista;
-}
-
-Future<List<TooBook>> fetchAutores() async {
-  List<TooBook> lista = [];
-  for (int i = 0; i < 5; i++) {
-    lista.add(TooBook(
-        idToobook: "idTooBook",
-        autor: "kike",
-        fecha: "15/10/2019 ",
-        sinopsis: "sinopsis",
-        titulo: "titulo del toobook $i"));
-  }
-  return lista;
-}
-
-String _generaSinopsis() {
-  return "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.";
 }
 
 enviaMensaje(idTooBook, idChat, mensaje, nombre) async {
@@ -153,23 +145,98 @@ Future<bool> usuarioLeyendoTooBook(uid, idTooBook) async {
     return true;
 }
 
-quitarLeyendo(uid,idTooBook)async{
-  await databaseReference.collection("users/$uid/leyendo")
-  .document(idTooBook)
-  .delete();
+quitarLeyendo(uid, idTooBook) async {
+  await databaseReference
+      .collection("users/$uid/leyendo")
+      .document(idTooBook)
+      .delete();
 }
-anadirLeyendo(uid,idTooBook)async{
-  await databaseReference.collection("users/$uid/leyendo")
-  .document(idTooBook)
-  .setData({});
+
+anadirLeyendo(uid, idTooBook) async {
+  await databaseReference
+      .collection("users/$uid/leyendo")
+      .document(idTooBook)
+      .setData({});
 }
-eliminaMensaje(docID, idTooBook, idChat)async{
-  await databaseReference.collection("toobooks/$idTooBook/chats/$idChat/mensajes")
-  .document(docID)
-  .delete();
+
+eliminaMensaje(docID, idTooBook, idChat) async {
+  await databaseReference
+      .collection("toobooks/$idTooBook/chats/$idChat/mensajes")
+      .document(docID)
+      .delete();
 }
-updateMensaje(texto,idTooBook,idChat,mensajeID)async{
-  await databaseReference.collection("toobooks/$idTooBook/chats/$idChat/mensajes")
-  .document(mensajeID)
-  .updateData({"texto":texto});
+
+updateMensaje(texto, idTooBook, idChat, mensajeID) async {
+  await databaseReference
+      .collection("toobooks/$idTooBook/chats/$idChat/mensajes")
+      .document(mensajeID)
+      .updateData({"texto": texto});
 }
+
+eliminaChat(documentID, tooBookId) async {
+  await databaseReference
+      .collection("toobooks/$tooBookId/chats")
+      .document(documentID)
+      .delete();
+}
+
+Future<int> getNumPublicaciones(uid) async {
+  int total;
+  await databaseReference
+      .collection("toobooks/")
+      .where("idAutor", isEqualTo: uid)
+      .getDocuments()
+      .then((QuerySnapshot snapshot) {
+    total = snapshot.documents.length;
+  });
+  return total;
+}
+
+Future<Usuario> fetchdatosUsuario(uid) async {
+  Usuario user;
+  await databaseReference
+      .collection("users/")
+      .where("uid", isEqualTo: uid)
+      .getDocuments()
+      .then((QuerySnapshot snapshot) {
+    user = Usuario.fromSnapshot(snapshot.documents[0]);
+  });
+  return user;
+}
+
+void uploadImage(
+    {@required File image,
+    @required String idTooBook,
+    @required String idChat,
+    @required String nombre}) async {
+
+    String url = await uploadImageToStorage(image);
+  
+    subeImagen(idTooBook,idChat,nombre,url);
+    }
+
+  void subeImagen(idTooBook,idChat,nombre,url) async {
+    await databaseReference
+          .collection("toobooks/$idTooBook/chats/$idChat/mensajes")
+          .add({
+        "nombre": nombre,
+        "texto": url,
+        "tipo": "foto",
+        "yo": nombre == "Yo",
+        "fecha": DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now()),
+      });
+  }
+  
+  Future<String> uploadImageToStorage(File imageFile) async {
+    try {
+      _storageReference = FirebaseStorage.instance
+          .ref()
+          .child('${DateTime.now().millisecondsSinceEpoch}');
+      StorageUploadTask storageUploadTask =
+          _storageReference.putFile(imageFile);
+      var url = await (await storageUploadTask.onComplete).ref.getDownloadURL();
+      return url;
+    } catch (e) {
+      return null;
+    }
+  }

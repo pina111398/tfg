@@ -107,7 +107,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   .document(currentUser.user.uid)
                                   .setData({
                                     "uid": currentUser.user.uid,
-                                    "fname": firstNameInputController.text,
+                                    "nombre": firstNameInputController.text,
                                     "email": emailInputController.text,
                                   })
                                   .then((result) => {

@@ -35,15 +35,12 @@ class DescubreBloc extends Bloc<DescubreEvent,DescubreState>{
         if (currentState is DescubreSinInicializar){
           List<TooBook> recientes;
           List<TooBook> top;
-          List<TooBook> autores;
           recientes = await db.fetchRecientes();
           top = await db.fetchTop();
-          autores = await db.fetchAutores();
           yield 
             DescubreCargado(
               recientes: recientes,
               top: top,
-              autores: autores,
             );
           return;
         }

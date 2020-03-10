@@ -37,7 +37,7 @@ class _MainPageState extends State<MainPage>{
               Search(uid: widget.uid),
               HomePage(uid: widget.uid),
               WriteTB(uid: widget.uid),
-              Perfil()
+              Perfil(uid: widget.uid)
             ],
           ),
         ),
