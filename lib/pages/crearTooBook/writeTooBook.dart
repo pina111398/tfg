@@ -57,13 +57,12 @@ class _WriteTBState extends State<WriteTB> {
               onPressed: () {
                 if (_formKey.currentState.validate()) {
                   controladorTitulo.clear();
-                  db.addTooBook(widget.uid, texto).then((documentId) => {
+                  db.addTooBook(widget.uid, texto).then((toobook) => {
                         Navigator.push(
                             context,
                             new MaterialPageRoute(
                                 builder: (context) => WriteChatsTB(
-                                      nombreTB: texto,
-                                      tooBookId: documentId,
+                                      tooBook: toobook,
                                     )))
                       });
                 }

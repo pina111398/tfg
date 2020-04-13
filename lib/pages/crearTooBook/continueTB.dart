@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:game/models/tooBook.dart';
 import 'package:game/pages/crearTooBook/writeChatsTB.dart';
 
 class ContinuarTB extends StatefulWidget {
@@ -37,8 +38,7 @@ class _ContinuarTBState extends State<ContinuarTB> {
                                 context,
                                 new MaterialPageRoute(
                                     builder: (context) => WriteChatsTB(
-                                          nombreTB: snapshot.data.documents[index]["titulo"],
-                                          tooBookId: snapshot.data.documents[index].documentID,
+                                      tooBook: TooBook.fromSnapshot(snapshot.data.documents[index]),
                                         )));
                           },
                           child: Column(
@@ -46,14 +46,15 @@ class _ContinuarTBState extends State<ContinuarTB> {
                             children: <Widget>[
                               Padding(
                                 padding: const EdgeInsets.all(20.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
                                     Text(
                                       snapshot.data.documents[index]['titulo'],
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold),
                                     ),
+                                    Icon(Icons.check_circle,color: Colors.green,)
                                   ],
                                 ),
                               ),

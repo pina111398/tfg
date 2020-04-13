@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:game/WrittingMessagesProvider.dart';
 import 'package:game/models/conversacion.dart';
 import 'package:game/models/mensaje.dart';
 import 'package:game/models/tooBook.dart';
@@ -58,16 +57,16 @@ Future<List<Mensaje>> fetchMensajes(
   return lista;
 }
 
-Future<String> addTooBook(userId, titulo) async {
-  print(userId);
+Future<TooBook> addTooBook(userId, titulo) async {
+  String fecha = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
   final doc = await databaseReference.collection("toobooks").add({
     "autor": "prueba",
     "idAutor": userId,
-    "sinopsis": "Sinopsis de prueba",
-    "fecha": DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now()),
+    "sinopsis": "",
+    "fecha": fecha,
     "titulo": titulo
   });
-  return doc.documentID;
+  return TooBook(autor: "prueba",fecha: fecha, idToobook: doc.documentID,sinopsis: "",titulo: titulo);
 }
 
 Future<String> addChatToTooBook(esGrupo, para, tooBookId) async {
@@ -239,4 +238,11 @@ void uploadImage(
     } catch (e) {
       return null;
     }
+  }
+  
+  Future actualizaInfoTooBook(titulo,sinopsis,tooBookId)async{
+    await databaseReference
+      .collection("toobooks")
+      .document(tooBookId)
+      .updateData({"titulo": titulo,"sinopsis": sinopsis});
   }

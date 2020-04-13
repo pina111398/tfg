@@ -32,87 +32,85 @@ class _PantallaMensajesState extends State<PantallaMensajes> {
     return ChangeNotifierProvider(
         create: (_) => WrittingNotifierMessages(widget.personajes),
         child: Scaffold(
-            appBar: new AppBar(
-              title: Text(widget.conversacion.para),
-              actions: <Widget>[
-                widget.conversacion.esGrupo
-                    ? Consumer<WrittingNotifierMessages>(builder: (_, notifier, child) {
-          return  
-                    
-                    IconButton(
-                        icon: Icon(Icons.add),
-                        onPressed: () {
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return _anadirPersonajeDialog(
-                                  widget.idTooBook,
-                                  widget.idChat,
-                                );
-                              }).then((nombre) {
-                            if (nombre != null)
-                              notifier.togglePersonaje(nombre);
+          appBar: new AppBar(
+            title: Text(widget.conversacion.para),
+            actions: <Widget>[
+              widget.conversacion.esGrupo
+                  ? Consumer<WrittingNotifierMessages>(
+                      builder: (_, notifier, child) {
+                      return IconButton(
+                          icon: Icon(Icons.add),
+                          onPressed: () {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return _anadirPersonajeDialog(
+                                    widget.idTooBook,
+                                    widget.idChat,
+                                  );
+                                }).then((nombre) {
+                              if (nombre != null)
+                                notifier.togglePersonaje(nombre);
+                            });
                           });
-                        });})
-                    : Container()
+                    })
+                  : Container()
+            ],
+          ),
+          body: SafeArea(
+            child: Column(
+              children: <Widget>[
+                Flexible(
+                  child: StreamBuilder<QuerySnapshot>(
+                    stream: Firestore.instance
+                        .collection(
+                            "toobooks/${widget.idTooBook}/chats/${widget.idChat}/mensajes")
+                        .orderBy("fecha", descending: true)
+                        .snapshots(),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<QuerySnapshot> snapshot) {
+                      if (snapshot.hasError)
+                        return new Text('Error: ${snapshot.error}');
+                      switch (snapshot.connectionState) {
+                        case ConnectionState.waiting:
+                          return Container();
+                        default:
+                          return ListView.builder(
+                            controller: _listScrollController,
+                            reverse: true,
+                            itemBuilder: (BuildContext ctx, int index) {
+                              return GestureDetector(
+                                key: Key(
+                                    snapshot.data.documents[index].documentID),
+                                child: MensajeUI(
+                                    esGrupo: widget.conversacion.esGrupo,
+                                    mensaje: Mensaje.fromSnapshot(
+                                        snapshot.data.documents[index])),
+                                onLongPress: () {
+                                  opcionesModal(
+                                      context,
+                                      snapshot.data.documents[index].documentID,
+                                      widget.idTooBook,
+                                      widget.idChat,
+                                      Mensaje.fromSnapshot(
+                                          snapshot.data.documents[index]));
+                                },
+                              );
+                            },
+                            itemCount: snapshot.data.documents.length,
+                          );
+                      }
+                    },
+                  ),
+                ),
+                ControlesChat(
+                  idTooBook: widget.idTooBook,
+                  idChat: widget.idChat,
+                ),
               ],
             ),
-            body: SafeArea(
-              child: Column(
-                children: <Widget>[
-                  Flexible(
-                    child: StreamBuilder<QuerySnapshot>(
-                      stream: Firestore.instance
-                          .collection(
-                              "toobooks/${widget.idTooBook}/chats/${widget.idChat}/mensajes")
-                          .orderBy("fecha", descending: true)
-                          .snapshots(),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<QuerySnapshot> snapshot) {
-                        if (snapshot.hasError)
-                          return new Text('Error: ${snapshot.error}');
-                        switch (snapshot.connectionState) {
-                          case ConnectionState.waiting:
-                            return Container();
-                          default:
-                            return ListView.builder(
-                              controller: _listScrollController,
-                              reverse: true,
-                              itemBuilder: (BuildContext ctx, int index) {
-                                return GestureDetector(
-                                  key: Key(snapshot
-                                      .data.documents[index].documentID),
-                                  child: MensajeUI(
-                                      esGrupo: widget.conversacion.esGrupo,
-                                      mensaje: Mensaje.fromSnapshot(
-                                          snapshot.data.documents[index])),
-                                  onLongPress: () {
-                                    opcionesModal(
-                                        context,
-                                        snapshot
-                                            .data.documents[index].documentID,
-                                        widget.idTooBook,
-                                        widget.idChat,
-                                        Mensaje.fromSnapshot(
-                                            snapshot.data.documents[index]));
-                                  },
-                                );
-                              },
-                              itemCount: snapshot.data.documents.length,
-                            );
-                        }
-                      },
-                    ),
-                  ),
-                  ControlesChat(
-                    idTooBook: widget.idTooBook,
-                    idChat: widget.idChat,
-                  ),
-                ],
-              ),
-            ),
-          )
-        );
+          ),
+        ));
   }
 
   _anadirPersonajeDialog(idTooBook, idChat) {
@@ -120,8 +118,7 @@ class _PantallaMensajesState extends State<PantallaMensajes> {
     final controladorNombre = TextEditingController();
 
     return Dialog(
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
       child: Container(
         height: 150,
         child: Padding(
@@ -213,7 +210,6 @@ class _PantallaMensajesState extends State<PantallaMensajes> {
 }
 
 class ControlesChat extends StatelessWidget {
-
   WrittingNotifierMessages provider;
   TextEditingController textFieldController = new TextEditingController();
   final String idTooBook;
@@ -260,7 +256,8 @@ class ControlesChat extends StatelessWidget {
                     ListTile(
                       title: Text('Imagen'),
                       leading: Icon(Icons.image),
-                      onTap: () => pickImage(source: ImageSource.gallery).then((_)=>Navigator.pop(context)),
+                      onTap: () => pickImage(source: ImageSource.gallery)
+                          .then((_) => Navigator.pop(context)),
                     ),
                     ListTile(
                       title: Text('Video'),
@@ -285,10 +282,11 @@ class ControlesChat extends StatelessWidget {
   Future pickImage({@required ImageSource source}) async {
     File selectedImage = await utilidades.pickImage(source: source);
     db.uploadImage(
-        image: selectedImage,
-        idTooBook: idTooBook,
-        idChat: idChat,
-        nombre: provider.nombre,);
+      image: selectedImage,
+      idTooBook: idTooBook,
+      idChat: idChat,
+      nombre: provider.nombre,
+    );
   }
 
   @override

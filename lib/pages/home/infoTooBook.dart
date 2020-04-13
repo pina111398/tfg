@@ -14,7 +14,7 @@ class InfoTooBook extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
+        child: ListView(
           children: <Widget>[
             Text(toobook.sinopsis)
           ],
