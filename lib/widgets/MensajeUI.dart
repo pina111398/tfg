@@ -3,28 +3,35 @@ import 'package:game/models/mensaje.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:audioplayers/audioplayers.dart';
+import 'player_widget.dart';
 
-class MensajeUI extends StatelessWidget {
+class MensajeUI extends StatefulWidget {
   final Mensaje mensaje;
   final bool esGrupo;
 
   MensajeUI({this.mensaje, this.esGrupo});
 
+  @override
+  _MensajeUIState createState() => _MensajeUIState();
+}
+
+class _MensajeUIState extends State<MensajeUI> {
   Widget build(BuildContext context) {
-    return mensaje.tipo != "referencia"
+    return widget.mensaje.tipo != "referencia"
         ? Container(
             margin: EdgeInsets.all(5),
-            padding: mensaje.yo
+            padding: widget.mensaje.yo
                 ? EdgeInsets.only(left: MediaQuery.of(context).size.width / 4)
                 : EdgeInsets.only(right: MediaQuery.of(context).size.width / 4),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 Column(
-                  mainAxisAlignment: mensaje.yo
+                  mainAxisAlignment: widget.mensaje.yo
                       ? MainAxisAlignment.end
                       : MainAxisAlignment.start,
-                  crossAxisAlignment: mensaje.yo
+                  crossAxisAlignment: widget.mensaje.yo
                       ? CrossAxisAlignment.end
                       : CrossAxisAlignment.start,
                   children: <Widget>[
@@ -32,7 +39,7 @@ class MensajeUI extends StatelessWidget {
                       padding: EdgeInsets.all(15),
                       decoration: BoxDecoration(
                         color: Colors.grey[300],
-                        borderRadius: mensaje.yo
+                        borderRadius: widget.mensaje.yo
                             ? BorderRadius.only(
                                 topRight: Radius.circular(15),
                                 topLeft: Radius.circular(15),
@@ -47,21 +54,21 @@ class MensajeUI extends StatelessWidget {
                               ),
                       ),
                       child: Column(
-                        crossAxisAlignment: mensaje.yo
+                        crossAxisAlignment: widget.mensaje.yo
                             ? CrossAxisAlignment.end
                             : CrossAxisAlignment.start,
                         children: <Widget>[
-                          esGrupo && !mensaje.yo
+                          widget.esGrupo && !widget.mensaje.yo
                               ? 
                               Text(
-                                  mensaje.nombre,
+                                  widget.mensaje.nombre,
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 )
                               : Container(
                                   width: 0,
                                 ),
                           //SI EL MENSAJE ES DE TIPO TEXTO LO MAQUETO COMO TEXTO
-                          mensaje.tipo == "texto"
+                          widget.mensaje.tipo == "texto"
                               ? Linkify(
                                   onOpen: (link) async {
                                     if (await canLaunch(link.url)) {
@@ -70,13 +77,14 @@ class MensajeUI extends StatelessWidget {
                                         throw 'Could not launch $link';
                                       }
                                   },
-                                  text: mensaje.text,
+                                  text: widget.mensaje.text,
                                   textAlign: TextAlign.start,
                                   linkStyle: TextStyle(color: Colors.blue),
                                 ) 
-                              : mensaje.tipo == "foto"
-                                  ? _montaFoto(mensaje)
-                                  : Container()
+                              : widget.mensaje.tipo == "foto"
+                                //SI EL MENSAJE ES DE TIPO FOTO LO MAQUETO COMO FOTO
+                                  ? _montaFoto(widget.mensaje)
+                                  : _montaAudio(widget.mensaje)
                         ],
                       ),
                     ),
@@ -85,7 +93,7 @@ class MensajeUI extends StatelessWidget {
               ],
             ),
           )
-        : _montaReferencia(mensaje);
+        : _montaReferencia(widget.mensaje);
   }
 
   _montaReferencia(Mensaje mensaje) {
@@ -96,19 +104,7 @@ class MensajeUI extends StatelessWidget {
       ],
     );
   }
-  _montaUrl(String url){
-    return RaisedButton(
-      padding: EdgeInsets.all(0),
-      elevation: 0,
-      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-      onPressed: ()async{
-      if (await canLaunch(url)) {
-        await launch(url);
-      } else {
-        throw 'No se pudo abrir $url';
-      }
-    }, child: Text(url,style: TextStyle(color:Colors.blue),));
-  }
+
   _montaFoto(Mensaje mensaje) {
     return Container(
       child: FlatButton(
@@ -150,5 +146,11 @@ class MensajeUI extends StatelessWidget {
         padding: EdgeInsets.all(0),
       ),
     );
+  }
+
+  _montaAudio(Mensaje mensaje){
+    return SingleChildScrollView(
+      child: 
+        PlayerWidget(url: mensaje.text),);
   }
 }
