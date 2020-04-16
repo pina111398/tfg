@@ -226,6 +226,17 @@ void uploadImage(
       });
   }
   
+  Future subeAudio(idTooBook,idChat,nombre,url) async {
+    await databaseReference
+          .collection("toobooks/$idTooBook/chats/$idChat/mensajes")
+          .add({
+        "nombre": nombre,
+        "texto": url,
+        "tipo": "audio",
+        "yo": nombre == "Yo",
+        "fecha": DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now()),
+      });
+  }
   Future<String> uploadImageToStorage(File imageFile) async {
     try {
       _storageReference = FirebaseStorage.instance
@@ -239,10 +250,31 @@ void uploadImage(
       return null;
     }
   }
+    Future<String> uploadAudioToStorage(File audioFile) async {
+    try {
+      _storageReference = FirebaseStorage.instance
+          .ref()
+          .child('${DateTime.now().millisecondsSinceEpoch}');
+      StorageUploadTask storageUploadTask =
+          _storageReference.putFile(audioFile);
+      var url = await (await storageUploadTask.onComplete).ref.getDownloadURL();
+      return url;
+    } catch (e) {
+      return null;
+    }
+  }
   
   Future actualizaInfoTooBook(titulo,sinopsis,tooBookId)async{
     await databaseReference
       .collection("toobooks")
       .document(tooBookId)
       .updateData({"titulo": titulo,"sinopsis": sinopsis});
+  }
+
+  Future<TooBook> getTooBookFromId(String toobookid)async{
+    DocumentSnapshot doc = await databaseReference
+        .collection("toobooks")
+        .document(toobookid)
+        .get();
+    return TooBook.fromSnapshot(doc);
   }

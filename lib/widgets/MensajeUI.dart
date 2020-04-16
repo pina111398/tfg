@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:game/models/mensaje.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:game/pages/home/conversaciones.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'player_widget.dart';
+import 'package:game/repositorio.dart' as db;
 
 class MensajeUI extends StatefulWidget {
   final Mensaje mensaje;
@@ -59,8 +61,7 @@ class _MensajeUIState extends State<MensajeUI> {
                             : CrossAxisAlignment.start,
                         children: <Widget>[
                           widget.esGrupo && !widget.mensaje.yo
-                              ? 
-                              Text(
+                              ? Text(
                                   widget.mensaje.nombre,
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 )
@@ -72,19 +73,21 @@ class _MensajeUIState extends State<MensajeUI> {
                               ? Linkify(
                                   onOpen: (link) async {
                                     if (await canLaunch(link.url)) {
-                                        await launch(link.url);
-                                      } else {
-                                        throw 'Could not launch $link';
-                                      }
+                                      await launch(link.url);
+                                    } else {
+                                      throw 'Could not launch $link';
+                                    }
                                   },
                                   text: widget.mensaje.text,
                                   textAlign: TextAlign.start,
                                   linkStyle: TextStyle(color: Colors.blue),
-                                ) 
+                                )
                               : widget.mensaje.tipo == "foto"
-                                //SI EL MENSAJE ES DE TIPO FOTO LO MAQUETO COMO FOTO
+                                  //SI EL MENSAJE ES DE TIPO FOTO LO MAQUETO COMO FOTO
                                   ? _montaFoto(widget.mensaje)
-                                  : _montaAudio(widget.mensaje)
+                                  : widget.mensaje.tipo == "audio"
+                                      ? _montaAudio(widget.mensaje)
+                                      : _montaToobook(widget.mensaje)
                         ],
                       ),
                     ),
@@ -100,8 +103,27 @@ class _MensajeUIState extends State<MensajeUI> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Text("${mensaje.text}",style: TextStyle(color:Colors.red,fontWeight: FontWeight.bold),)
+        Text(
+          "${mensaje.text}",
+          style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+        )
       ],
+    );
+  }
+
+  _montaToobook(Mensaje mensaje) {
+    return GestureDetector(
+        child: Text(
+      "TooBook",
+      style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
+    ),
+    onTap: ()=> db.getTooBookFromId(mensaje.text).then((tooBook){
+      Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => Conversaciones(
+                  tooBook: tooBook,
+                  uid: null,
+                )));
+    })
     );
   }
 
@@ -148,9 +170,9 @@ class _MensajeUIState extends State<MensajeUI> {
     );
   }
 
-  _montaAudio(Mensaje mensaje){
+  _montaAudio(Mensaje mensaje) {
     return SingleChildScrollView(
-      child: 
-        PlayerWidget(url: mensaje.text),);
+      child: PlayerWidget(url: mensaje.text),
+    );
   }
 }

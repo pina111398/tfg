@@ -28,7 +28,7 @@ class _ConversacionesState extends State<Conversaciones> {
     // TODO: implement initState
     super.initState();
     _getConversaciones();
-    _getLeyendo();
+    widget.uid != null ? _getLeyendo():null;
   }
 
   @override
@@ -41,7 +41,9 @@ class _ConversacionesState extends State<Conversaciones> {
             children: <Widget>[
               Padding(
                   padding: const EdgeInsets.only(right: 6),
-                  child: cargandoLeyendo
+                  child: 
+                  widget.uid == null ? Container() :
+                  cargandoLeyendo
                       ? Container(
                           height: 12,
                           width: 12,

@@ -7,7 +7,8 @@ import 'package:path_provider/path_provider.dart';
 
 Future<File> pickImage({@required ImageSource source}) async {
     File selectedImage = await ImagePicker.pickImage(source: source);
-    return await compressImage(selectedImage);
+    
+    return selectedImage != null ? await compressImage(selectedImage) : null;
   }
 
 Future<File> compressImage(File imageToCompress) async {

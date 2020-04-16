@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:game/WrittingMessagesProvider.dart';
 import 'package:game/models/conversacion.dart';
 import 'package:game/models/mensaje.dart';
+import 'package:game/pages/crearTooBook/grabaAudio.dart';
 import 'package:game/widgets/MensajeUI.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -266,6 +267,10 @@ class ControlesChat extends StatelessWidget {
                     ListTile(
                       title: Text('Audio'),
                       leading: Icon(Icons.audiotrack),
+                      onTap: ()=>Navigator.push(
+                              context,
+                              new MaterialPageRoute(
+                                  builder: (context) => GrabaAudio(idTooBook: idTooBook,idChat: idChat,nombre: provider.nombre,))),
                     ),
                     ListTile(
                       title: Text('TooBook'),
@@ -281,12 +286,13 @@ class ControlesChat extends StatelessWidget {
 
   Future pickImage({@required ImageSource source}) async {
     File selectedImage = await utilidades.pickImage(source: source);
+    selectedImage != null ?
     db.uploadImage(
       image: selectedImage,
       idTooBook: idTooBook,
       idChat: idChat,
       nombre: provider.nombre,
-    );
+    ) : null;
   }
 
   @override
