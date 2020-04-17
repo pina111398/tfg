@@ -59,12 +59,14 @@ Future<List<Mensaje>> fetchMensajes(
 
 Future<TooBook> addTooBook(userId, titulo) async {
   String fecha = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
+  Usuario usuario = await fetchdatosUsuario(userId);
   final doc = await databaseReference.collection("toobooks").add({
-    "autor": "prueba",
+    "autor": usuario.nombre,
     "idAutor": userId,
     "sinopsis": "",
     "fecha": fecha,
-    "titulo": titulo
+    "titulo": titulo,
+    "publico":false,
   });
   return TooBook(autor: "prueba",fecha: fecha, idToobook: doc.documentID,sinopsis: "",titulo: titulo);
 }

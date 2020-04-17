@@ -4,7 +4,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:game/pages/home/conversaciones.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
-import 'package:audioplayers/audioplayers.dart';
 import 'player_widget.dart';
 import 'package:game/repositorio.dart' as db;
 

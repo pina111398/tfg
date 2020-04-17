@@ -10,7 +10,7 @@ class ResuTB extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return GestureDetector(
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => Conversaciones(
@@ -23,8 +23,9 @@ class ResuTB extends StatelessWidget {
             minHeight: 10.0,
             maxHeight: 150.0,
           ),
-          child: ListTile(
-            title: Padding(
+          child: Column(
+            children: <Widget>[
+              Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -37,25 +38,27 @@ class ResuTB extends StatelessWidget {
                 ],
               ),
             ),
-            subtitle: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
+
                 Flexible(
-                  child: RichText(
-                    overflow: TextOverflow.clip,
-                    strutStyle: StrutStyle(fontSize: 12.0),
-                    text: TextSpan(
-                        style: TextStyle(color: Colors.black),
-                        text: toobook.sinopsis),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: RichText(
+                      overflow: TextOverflow.fade,
+                      strutStyle: StrutStyle(fontSize: 12.0),
+                      text: TextSpan(
+                          style: TextStyle(color: Colors.black),
+                          text: toobook.sinopsis),
+                    ),
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[Text(toobook.autor)],
+                Padding(
+                  padding: const EdgeInsets.only(right: 8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[Text(toobook.autor)],
+                  ),
                 ),
-                Divider(height: 0,)
-              ],
-            ),
+                Divider(height: 0,)]
           ),
         ),
       

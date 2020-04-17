@@ -5,8 +5,10 @@ import 'package:game/blocs/bloc_misToobooks/misTB_bloc.dart';
 import 'package:game/blocs/bloc_misToobooks/misTB_event.dart';
 import 'package:game/blocs/bloc_misToobooks/misTB_state.dart';
 import 'package:game/models/tooBook.dart';
+import 'package:game/widgets/widgetTooBook.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:game/widgets/resumentb.dart';
+import 'package:game/repositorio.dart' as db;
 
 class HomePage extends StatefulWidget {
   HomePage({Key key, this.uid}) : super(key: key);
@@ -53,12 +55,7 @@ class _HomePageState extends State<HomePage> {
                 if (state is MisTBCargado) {
                   return RefreshIndicator(
                     color: Colors.blue,
-                    child: ListView.builder(
-                      itemCount: state.misTB.length,
-                      itemBuilder: (ctxt, index) {
-                        return _montaItem1(state.misTB[index]);
-                      },
-                    ),
+                    child: _montaItem1(state),
                     onRefresh: () async {
                       await Future.delayed(Duration(seconds: 1, milliseconds: 50));
                       _misTBBloc.dispatch(Refresh());
@@ -69,9 +66,13 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  _montaItem1(TooBook toobook) {
-    return Dismissible(
-      key: Key(toobook.idToobook),
+  _montaItem1(state) {
+    return
+    ListView.builder(
+      itemCount: state.misTB.length,
+      itemBuilder: (ctxt, index) {
+        return Dismissible(
+      key: Key(state.misTB[index].idToobook),
       background: Container(
         width: 0,
         color: Colors.red,
@@ -84,14 +85,24 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       direction: DismissDirection.endToStart,
-      onDismissed: (direction) {
+      onDismissed: (direction) async{
+        await db.quitarLeyendo(widget.uid, state.misTB[index].idToobook);
+        setState(() {
+          state.misTB..removeAt(index);
+        });
         Scaffold.of(context).showSnackBar(SnackBar(content: Text("Borrado")));
       },
       child: 
-          ResuTB(
+          /*ResuTB(
             toobook: toobook, 
             uid: widget.uid,
-          ),
+          ),*/
+          WidgetTB(
+            toobook: state.misTB[index], 
+            uid: widget.uid,
+          )
+    );
+      },
     );
   }
 
