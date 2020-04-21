@@ -47,5 +47,10 @@
 	<string>Permisos camara</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Permisos microfono</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
 </dict>
 </plist>

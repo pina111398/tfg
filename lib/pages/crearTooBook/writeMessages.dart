@@ -3,7 +3,7 @@ import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:game/WrittingMessagesProvider.dart';
+import 'package:game/providers/WrittingMessagesProvider.dart';
 import 'package:game/models/conversacion.dart';
 import 'package:game/models/mensaje.dart';
 import 'package:game/pages/crearTooBook/grabaAudio.dart';

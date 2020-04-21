@@ -2,18 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/scheduler/ticker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:game/blocs/bloc_descrubre/descubre_bloc.dart';
-import 'package:game/blocs/bloc_descrubre/descubre_event.dart';
-import 'package:game/blocs/bloc_descrubre/descubre_state.dart';
-import 'package:game/dos.dart';
 import 'package:game/models/tooBook.dart';
 import 'package:game/widgets/resumenToobook.dart';
-import 'package:game/descubreBuscadorProvider.dart';
+import 'package:game/providers/descubreBuscadorProvider.dart';
 import 'package:game/widgets/resumentb.dart';
 import 'package:game/widgets/widgetTooBook.dart';
 import 'package:provider/provider.dart';
 
-import '../TabSearch.dart';
+import 'TabSearch.dart';
 
 class Search extends StatefulWidget {
   Search({Key key, this.uid}) : super(key: key);
@@ -49,23 +45,39 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
           ],
           title: notifier.appBarForm ? Form(
             key: _formKey,
-            child: TextFormField(
-              decoration: InputDecoration(
-                hintText: "Titulo, autor, categoria, palabra clave...",
+            child: Container(
+              height: 40,
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius:  BorderRadius.circular(12),
               ),
-              validator: (value) {
-                if (value.isEmpty) {
-                  return 'Please enter some text';
-                }
-                return null;
-              },
-              onChanged: (val) {
-                if (val.length > 0 && val.trim() != "") {
-                  notifier.toggleWritting(true);
-                  notifier.toggleTexto(val);
-                } else
-                  notifier.toggleWritting(false);
-              },
+              child: Padding(
+                padding: const EdgeInsets.only(left: 12),
+                child: TextFormField(
+                  decoration: InputDecoration(
+                    hintStyle: TextStyle(fontSize: 17),
+                    hintText: "Titulo, autor, categoria, palabra clave...",
+                    border: InputBorder.none,
+                    
+                  ),
+                   
+                    
+
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Please enter some text';
+                    }
+                    return null;
+                  },
+                  onChanged: (val) {
+                    if (val.length > 0 && val.trim() != "") {
+                      notifier.toggleWritting(true);
+                      notifier.toggleTexto(val);
+                    } else
+                      notifier.toggleWritting(false);
+                  },
+                ),
+              ),
             ),
           ) : Text("Descubre"),),
         body:

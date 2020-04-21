@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:game/theme.dart';
+import 'package:game/providers/theme.dart';
 import 'package:provider/provider.dart';
 
 class Ajustes extends StatelessWidget {

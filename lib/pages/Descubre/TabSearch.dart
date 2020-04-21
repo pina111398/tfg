@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:game/widgets/widgetTooBook.dart';
-import 'repositorio.dart' as db;
-import 'models/tooBook.dart';
+import 'package:game/repositorio.dart' as db;
+import '../../models/tooBook.dart';
 
 class TabSearch extends StatefulWidget {
   final String uid;

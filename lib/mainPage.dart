@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:game/pages/crearTooBook/writeTooBook.dart';
 import 'package:game/pages/home/home.dart';
 import 'package:game/pages/perfil/perfil.dart';
-import 'package:game/pages/search.dart';
-import 'package:game/theme.dart';
+import 'package:game/pages/Descubre/search.dart';
+import 'package:game/providers/theme.dart';
 import 'package:provider/provider.dart';
 class MainPage extends StatefulWidget {
   MainPage({Key key,this.uid}) : super(key: key);

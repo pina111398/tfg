@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:game/models/usuario.dart';
 import 'package:provider/provider.dart';
 import 'package:game/repositorio.dart' as db;
-import 'package:game/theme.dart';
+import 'package:game/providers/theme.dart';
 
 class Perfil extends StatefulWidget {
   Perfil({Key key, this.uid}) : super(key: key);

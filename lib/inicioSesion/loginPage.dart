@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 import '../mainPage.dart';
-import '../theme.dart';
+import '../providers/theme.dart';
 
 const color = const Color(0xff01A0C7);
 class LoginPage extends StatefulWidget {

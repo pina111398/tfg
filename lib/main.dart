@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:game/pages/home/infoTooBook.dart';
 import 'package:game/pages/perfil/ajustes.dart';
 import 'package:provider/provider.dart';
-import 'descubreBuscadorProvider.dart';
+import 'providers/descubreBuscadorProvider.dart';
 import 'mainPage.dart';
 import 'inicioSesion/loginPage.dart';
 import 'inicioSesion/registerPage.dart';
 import 'splash_page.dart';
-import 'theme.dart';
+import 'providers/theme.dart';
 
 void main() => runApp(MyApp());
 
