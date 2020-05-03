@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:game/editTooBookProvider.dart';
+import 'package:game/providers/editTooBookProvider.dart';
 import 'package:game/models/tooBook.dart';
 import 'package:provider/provider.dart';
 import 'package:game/repositorio.dart' as db;
