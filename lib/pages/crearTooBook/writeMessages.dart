@@ -346,7 +346,7 @@ class ControlesChat extends StatelessWidget {
                   child: FloatingActionButton.extended(
                     label: Text(provider.nombre),
                     elevation: 0,
-                    backgroundColor: Colors.grey[400],
+                    backgroundColor: Colors.grey[400], onPressed: ()=>null,
                   ),
                   itemBuilder: (_) => <PopupMenuItem<String>>[
                         for (String personaje in provider.personajes)
