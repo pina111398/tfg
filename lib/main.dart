@@ -12,15 +12,13 @@ import 'providers/theme.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => ThemeNotifier()),
-         ChangeNotifierProvider(create: (_) => DescubreBuscadorNotifier()),
+        ChangeNotifierProvider(create: (_) => DescubreBuscadorNotifier()),
       ],
-    
           child: Consumer<ThemeNotifier>(
             builder: (context, ThemeNotifier notifier, child) {
               return MaterialApp(
@@ -29,15 +27,12 @@ class MyApp extends StatelessWidget {
                 theme: notifier.darkTheme ? dark : light,
                 home: SplashPage(),
                 routes: <String, WidgetBuilder>{
-                  '/home': (BuildContext context) => MainPage(),
                   '/login': (BuildContext context) => LoginPage(),
                   '/register': (BuildContext context) => RegisterPage(),
                   '/ajustes': (BuildContext context) => Ajustes(),
-                  '/infoTooBook': (BuildContext context) => InfoTooBook(),
                 }
               );
             } ,
           ),);
-    
   }
 }

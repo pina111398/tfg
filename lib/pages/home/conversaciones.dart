@@ -98,17 +98,11 @@ class _ConversacionesState extends State<Conversaciones> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              conversaciones[index].para,
+                      ListTile(
+                        title: Text(index==0 ?"* " +
+                              conversaciones[index].para : conversaciones[index].para ,
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
-                          ],
-                        ),
                       ),
                       Divider(
                         height: 5,
@@ -120,7 +114,7 @@ class _ConversacionesState extends State<Conversaciones> {
               itemCount: conversaciones.length,
             )
           : Center(
-              child: Text("Vacio"),
+              child: Text("No hay conversaciones"),
             ),
     );
   }

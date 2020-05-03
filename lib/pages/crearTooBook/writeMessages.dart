@@ -267,10 +267,10 @@ class ControlesChat extends StatelessWidget {
                     ListTile(
                       title: Text('Audio'),
                       leading: Icon(Icons.audiotrack),
-                      onTap: ()=>Navigator.push(
+                      onTap: ()=>null/*Navigator.push(
                               context,
                               new MaterialPageRoute(
-                                  builder: (context) => GrabaAudio(idTooBook: idTooBook,idChat: idChat,nombre: provider.nombre,))),
+                                  builder: (context) => GrabaAudio(idTooBook: idTooBook,idChat: idChat,nombre: provider.nombre,))),*/
                     ),
                     ListTile(
                       title: Text('TooBook'),

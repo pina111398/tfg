@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -22,19 +21,14 @@ class _SplashPageState extends State<SplashPage> {
                 {Navigator.pushReplacementNamed(context, "/login")}
               else
                 {
-                  Firestore.instance
-                      .collection("users")
-                      .document(currentUser.uid)
-                      .get()
-                      .then((DocumentSnapshot result) =>
-                          Navigator.pushReplacement(
-                              context,
-                            PageTransition(type: PageTransitionType.fade, alignment: Alignment.bottomCenter, child: 
-                              MainPage(
-                                        uid: currentUser.uid,
-                                      )
-                            )))
-                      .catchError((err) => print(err))
+                  Navigator.pushReplacement(
+                      context,
+                      PageTransition(
+                          type: PageTransitionType.fade,
+                          alignment: Alignment.bottomCenter,
+                          child: MainPage(
+                            uid: currentUser.uid,
+                          )))
                 }
             })
         .catchError((err) => print(err));
@@ -45,9 +39,9 @@ class _SplashPageState extends State<SplashPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Container(
-          child: Text("Cargando..."),
-        ),
+        child: CircularProgressIndicator(
+          valueColor: new AlwaysStoppedAnimation<Color>(Colors.blue),
+        )
       ),
     );
   }

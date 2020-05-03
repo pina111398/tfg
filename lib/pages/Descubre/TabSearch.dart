@@ -55,10 +55,10 @@ class _TabSearchState extends State<TabSearch> {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        Text(
+        /*Text(
           widget.titulo,
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-        ),
+        ),*/
         if (cargado) _montaItem1(toobooks) else CircularProgressIndicator()
       ],
     );

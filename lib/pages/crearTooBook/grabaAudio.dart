@@ -1,6 +1,6 @@
 import 'dart:io' as io;
 import 'dart:math';
-
+/*
 import 'package:audio_recorder/audio_recorder.dart';
 import 'package:file/file.dart';
 import 'package:file/local.dart';
@@ -82,4 +82,4 @@ class _GrabaAudioState extends State<GrabaAudio> {
     String url = await db.uploadAudioToStorage(file);
     db.subeAudio(widget.idTooBook, widget.idChat, widget.nombre, url).then((onValue){Navigator.pop(context);});
   }
-}
+}*/

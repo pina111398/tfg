@@ -31,7 +31,8 @@ class _MainPageState extends State<MainPage>{
       body:
         SafeArea(
           top: false,
-          child: IndexedStack(
+          child: 
+          IndexedStack(
             index: _currentIndex,
             children: <Widget>[
               Search(uid: widget.uid),
@@ -55,9 +56,10 @@ class _MainPageState extends State<MainPage>{
             selectedItemColor: Theme.of(context).brightness == Brightness.light ? Colors.black : Colors.white,
             currentIndex: _currentIndex,
             onTap: (int i){
+              _currentIndex != i ? 
               setState(() {
               _currentIndex = i; 
-              });
+              }) : null;
             },
             items: items,
           ),

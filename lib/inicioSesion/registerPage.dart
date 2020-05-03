@@ -90,11 +90,15 @@ class _RegisterPageState extends State<RegisterPage> {
                     obscureText: true,
                     validator: pwdValidator,
                   ),
-                  RaisedButton(
-                    child: Text("Registrarse",style: TextStyle(color: Colors.black),),
-                    color: Theme.of(context).primaryColor,
-                    textColor: Colors.white,
-                    onPressed: () {
+                  SizedBox(height: 10,),
+                  Material(
+                      elevation: 5.0,
+                      borderRadius: BorderRadius.circular(30.0),
+                      color: Color(0xff01A0C7),
+                      child: MaterialButton(
+                        minWidth: MediaQuery.of(context).size.width,
+                        padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                        onPressed: () {
                       if (_registerFormKey.currentState.validate()) {
                         if (pwdInputController.text ==
                             confirmPwdInputController.text) {
@@ -144,7 +148,13 @@ class _RegisterPageState extends State<RegisterPage> {
                         }
                       }
                     },
-                  ),
+                        child: Text("Registrarse",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Colors.white, fontWeight: FontWeight.bold)),
+                      ),
+                    ),
+                  
                   Text("¿Ya tienes cuenta?"),
                   FlatButton(
                     child: Text("Login here!"),

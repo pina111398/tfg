@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:game/models/mensaje.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:game/pages/home/conversaciones.dart';
+import 'package:game/widgets/videoPlayerScreen.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'player_widget.dart';
 import 'package:game/repositorio.dart' as db;
+//import 'package:video_player/video_player.dart';
 
 class MensajeUI extends StatefulWidget {
   final Mensaje mensaje;
@@ -18,7 +20,7 @@ class MensajeUI extends StatefulWidget {
 }
 
 class _MensajeUIState extends State<MensajeUI> {
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
     return widget.mensaje.tipo != "referencia"
         ? Container(
             margin: EdgeInsets.all(5),
@@ -86,6 +88,8 @@ class _MensajeUIState extends State<MensajeUI> {
                                   ? _montaFoto(widget.mensaje)
                                   : widget.mensaje.tipo == "audio"
                                       ? _montaAudio(widget.mensaje)
+                                      : widget.mensaje.tipo == "video"
+                                      ? _montaVideo(widget.mensaje)
                                       : _montaToobook(widget.mensaje)
                         ],
                       ),
@@ -95,10 +99,13 @@ class _MensajeUIState extends State<MensajeUI> {
               ],
             ),
           )
-        : _montaReferencia(widget.mensaje);
+        : _montaAlerta(widget.mensaje);
   }
-
-  _montaReferencia(Mensaje mensaje) {
+  
+  _montaVideo(Mensaje mensaje) {
+    return /*VideoPlayerWidget(url: "https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4",);*/ Center();
+  }
+  _montaAlerta(Mensaje mensaje) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
