@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/scheduler/ticker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game/models/tooBook.dart';
-import 'package:game/widgets/resumenToobook.dart';
 import 'package:game/providers/descubreBuscadorProvider.dart';
 import 'package:game/widgets/resumentb.dart';
 import 'package:game/widgets/widgetTooBook.dart';
