@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:game/inicioSesion/loginPage.dart';
 import 'mainPage.dart';
 import 'package:page_transition/page_transition.dart';
 
@@ -18,7 +19,10 @@ class _SplashPageState extends State<SplashPage> {
         .currentUser()
         .then((currentUser) => {
               if (currentUser == null)
-                {Navigator.pushReplacementNamed(context, "/login")}
+                {
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) => LoginPage()))
+                }
               else
                 {
                   Navigator.pushReplacement(
@@ -39,10 +43,9 @@ class _SplashPageState extends State<SplashPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: CircularProgressIndicator(
-          valueColor: new AlwaysStoppedAnimation<Color>(Colors.blue),
-        )
-      ),
+          child: CircularProgressIndicator(
+        valueColor: new AlwaysStoppedAnimation<Color>(Colors.blue),
+      )),
     );
   }
 }

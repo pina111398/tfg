@@ -54,7 +54,9 @@ class _ContinuarTBState extends State<ContinuarTB> {
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold),
                                     ),
-                                    Icon(Icons.check_circle,color: Colors.green,)
+                                    snapshot.data.documents[index]['publico'] ?
+                                      Icon(Icons.check_circle, color:  Colors.green)
+                                    : Icon(Icons.do_not_disturb_on, color:  Colors.red)
                                   ],
                                 ),
                               ),

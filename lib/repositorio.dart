@@ -70,7 +70,7 @@ Future<TooBook> addTooBook(userId, titulo) async {
     "titulo": titulo,
     "publico":false,
   });
-  return TooBook(autor: "prueba",fecha: fecha, idToobook: doc.documentID,sinopsis: "",titulo: titulo);
+  return TooBook(autor: "prueba",fecha: fecha, idToobook: doc.documentID,sinopsis: "",titulo: titulo,publico: false);
 }
 
 Future<String> addChatToTooBook(esGrupo, para, tooBookId) async {
@@ -282,3 +282,50 @@ void uploadImage(
         .get();
     return TooBook.fromSnapshot(doc);
   }
+
+  Future<List<TooBook>> getPublicTooBooksFromIdUser(String idUser)async{
+    List<TooBook> lista = [];
+    await databaseReference
+        .collection("toobooks")
+        .where("idAutor", isEqualTo: idUser)
+        .where("publico",isEqualTo: true)
+        .getDocuments().then((QuerySnapshot snapshot){
+          snapshot.documents.forEach((f) => lista.add(TooBook.fromSnapshot(f)));
+        });
+    return lista;
+  }
+  Future<List<TooBook>> getPrivateTooBooksFromIdUser(String idUser)async{
+    List<TooBook> lista = [];
+    await databaseReference
+        .collection("toobooks")
+        .where("idAutor", isEqualTo: idUser)
+        .where("publico",isEqualTo: false)
+        .getDocuments().then((QuerySnapshot snapshot){
+          snapshot.documents.forEach((f) => lista.add(TooBook.fromSnapshot(f)));
+        });
+    return lista;
+  }
+
+  Future<String> updateImagenPerfil(
+    {@required File image,
+    @required String uid}) async {
+
+    String url = await uploadImageToStorage(image);
+  
+    await actualizaImagenPerfil(uid,url);
+    return url;
+    }
+
+    Future actualizaImagenPerfil(uid,url) async {
+    await databaseReference
+          .collection("users")
+          .document(uid)
+          .updateData({"fotoPerfil":url});
+  }
+
+  Future updatePerfil(uid, nombre, apellido) async {
+    await databaseReference
+        .collection("users")
+          .document(uid)
+          .updateData({"nombre":nombre,"apellido": apellido});
+}

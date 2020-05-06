@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:game/inicioSesion/registerPage.dart';
 import 'package:provider/provider.dart';
 import '../mainPage.dart';
 import '../providers/theme.dart';
@@ -98,7 +99,10 @@ class _LoginPageState extends State<LoginPage> {
               FlatButton(
                       child: Text("Registrarse",),
                       onPressed: (){
-                        Navigator.pushNamed(context, '/register');
+                        Navigator.push(
+                        context,
+                        new MaterialPageRoute(
+                            builder: (context) => RegisterPage()));
                       },
                     )
             ],
