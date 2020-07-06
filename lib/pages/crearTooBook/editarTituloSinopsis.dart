@@ -17,6 +17,7 @@ class _EditarTooBookState extends State<EditarTooBook> {
 
   TextEditingController tituloController = new TextEditingController();
   TextEditingController sinopsisController = new TextEditingController();
+  bool publico;
   @override
   void initState() {
     // TODO: implement initState
@@ -36,6 +37,19 @@ class _EditarTooBookState extends State<EditarTooBook> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text("Público",style:TextStyle(fontWeight: FontWeight.bold,fontSize: 24)),
+                  Switch(
+                    activeColor: Colors.grey,
+                    onChanged: (val) {
+                      widget.provider.togglePublico(val);
+                    },
+                    value: widget.provider.publico,
+                  ),
+                ],
+              ),
               Text("Titulo",style:TextStyle(fontWeight: FontWeight.bold,fontSize: 24)),
               SizedBox(height: 10,),
               TextFormField(
@@ -83,7 +97,7 @@ class _EditarTooBookState extends State<EditarTooBook> {
                   minWidth: MediaQuery.of(context).size.width,
                   padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
                   onPressed: () {
-                    db.actualizaInfoTooBook(tituloController.text,sinopsisController.text,widget.tooBook.idToobook).then((_){
+                    db.actualizaInfoTooBook(tituloController.text,sinopsisController.text,widget.tooBook.idToobook,widget.provider.publico).then((_){
                       widget.provider.toggleTitulo(tituloController.text);
                       widget.provider.toggleSinopsis(sinopsisController.text);
                       Navigator.pop(context);

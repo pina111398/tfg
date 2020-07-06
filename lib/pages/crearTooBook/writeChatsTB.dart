@@ -28,7 +28,7 @@ class _WriteChatsTBState extends State<WriteChatsTB> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => EditTooBookProvider(widget.tooBook.titulo,widget.tooBook.sinopsis),
+      create: (_) => EditTooBookProvider(widget.tooBook.titulo,widget.tooBook.sinopsis,widget.tooBook.publico),
       child: Scaffold(
           appBar: AppBar(
             title: Consumer<EditTooBookProvider>(builder: (_, notifier, child) {

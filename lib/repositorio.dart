@@ -78,6 +78,7 @@ Future<String> addChatToTooBook(esGrupo, para, tooBookId) async {
       await databaseReference.collection("toobooks/$tooBookId/chats").add({
     "esGrupo": esGrupo,
     "para": para,
+    "inicio": false,
   });
   return doc.documentID;
 }
@@ -106,6 +107,7 @@ Future<List<TooBook>> fetchRecientes() async {
   List<TooBook> lista = [];
   await databaseReference
       .collection("toobooks/")
+      .where("publico",isEqualTo: true)
       .orderBy("fecha", descending: true)
       .getDocuments()
       .then((QuerySnapshot snapshot) {
@@ -118,6 +120,18 @@ Future<List<TooBook>> fetchTop() async {
   List<TooBook> lista = [];
   await databaseReference
       .collection("toobooks/")
+      .where("publico",isEqualTo: true)
+      .getDocuments()
+      .then((QuerySnapshot snapshot) {
+    snapshot.documents.forEach((f) => lista.add(TooBook.fromSnapshot(f)));
+  });
+  return lista;
+}
+Future<List<TooBook>> fetchByCategoria(String categoria) async {
+  List<TooBook> lista = [];
+  await databaseReference
+      .collection("toobooks/")
+      .where("publico",isEqualTo: true).limit(1)
       .getDocuments()
       .then((QuerySnapshot snapshot) {
     snapshot.documents.forEach((f) => lista.add(TooBook.fromSnapshot(f)));
@@ -268,11 +282,11 @@ void uploadImage(
     }
   }
   
-  Future actualizaInfoTooBook(titulo,sinopsis,tooBookId)async{
+  Future actualizaInfoTooBook(titulo,sinopsis,tooBookId,publico)async{
     await databaseReference
       .collection("toobooks")
       .document(tooBookId)
-      .updateData({"titulo": titulo,"sinopsis": sinopsis});
+      .updateData({"titulo": titulo,"sinopsis": sinopsis,"publico":publico});
   }
 
   Future<TooBook> getTooBookFromId(String toobookid)async{
@@ -323,9 +337,9 @@ void uploadImage(
           .updateData({"fotoPerfil":url});
   }
 
-  Future updatePerfil(uid, nombre, apellido) async {
+  Future updatePerfil(uid, nombre, apellido,descripcion) async {
     await databaseReference
         .collection("users")
           .document(uid)
-          .updateData({"nombre":nombre,"apellido": apellido});
+          .updateData({"nombre":nombre,"apellido": apellido,"descripcion": descripcion});
 }

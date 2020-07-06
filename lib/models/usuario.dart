@@ -4,7 +4,7 @@ class Usuario{
   final String uid;
   String nombre;
   String apellido;
-  final String descripcion;
+  String descripcion;
   final String email;
   String fotoPerfil;
 

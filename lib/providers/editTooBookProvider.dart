@@ -12,9 +12,10 @@ class EditTooBookProvider extends ChangeNotifier {
   bool get publico => _publico;
   String get sinopsis => _sinopsis;
   
-  EditTooBookProvider(String titulo, sinopsis) {
+  EditTooBookProvider(String titulo, sinopsis,publico) {
     _titulo = titulo;
     _sinopsis = sinopsis;
+    _publico = publico;
   }
   toggleTitulo(String titulo) {
     _titulo = titulo;

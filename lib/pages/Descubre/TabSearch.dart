@@ -42,11 +42,12 @@ class _TabSearchState extends State<TabSearch> {
         toobooks = recientes;
       });
     }):
-    db.fetchRecientes().then((recientes) {
+    db.fetchByCategoria(widget.busqueda).then((categoria) {
       setState(() {
+        print(widget.busqueda);
         cargado = true;
         print("Cargado true");
-        toobooks = recientes;
+        toobooks = categoria;
       });
     }); 
   }

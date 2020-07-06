@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-/*import 'package:video_player/video_player.dart';
+import 'package:video_player/video_player.dart';
 
 class VideoPlayerWidget extends StatefulWidget {
   final String url;
@@ -68,4 +68,4 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
         ),
     );
   }
-}*/
+}

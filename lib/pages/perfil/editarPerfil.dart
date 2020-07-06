@@ -19,6 +19,7 @@ class _EditarInformacionUsuarioState extends State<EditarInformacionUsuario> {
   
   TextEditingController nombreController = new TextEditingController();
   TextEditingController apellidoController = new TextEditingController();
+  TextEditingController descripcionController = new TextEditingController();
   
 @override
   void initState() {
@@ -26,6 +27,7 @@ class _EditarInformacionUsuarioState extends State<EditarInformacionUsuario> {
     super.initState();
     nombreController.text = widget.usuario.nombre;
     apellidoController.text = widget.usuario.apellido;
+    descripcionController.text = widget.usuario.descripcion;
   }
 
   @override
@@ -101,6 +103,22 @@ class _EditarInformacionUsuarioState extends State<EditarInformacionUsuario> {
                   ),
                 ),
               SizedBox(height: 10,),
+              TextFormField(
+                  controller: descripcionController,
+                  onChanged: (val) {
+                  },
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                        borderRadius: const BorderRadius.all(
+                          const Radius.circular(50.0),
+                        ),
+                        borderSide: BorderSide.none),
+                    contentPadding:
+                        EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                    filled: true,
+                  ),
+                ),
+              SizedBox(height: 10,),
               Material(
                 elevation: 5.0,
                 borderRadius: BorderRadius.circular(30.0),
@@ -109,9 +127,10 @@ class _EditarInformacionUsuarioState extends State<EditarInformacionUsuario> {
                   minWidth: MediaQuery.of(context).size.width,
                   padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
                   onPressed: () {
-                    db.updatePerfil(widget.usuario.uid, nombreController.text, apellidoController.text).then((onValue){setState(() {
+                    db.updatePerfil(widget.usuario.uid, nombreController.text, apellidoController.text, descripcionController.text).then((onValue){setState(() {
                       widget.usuario.nombre = nombreController.text;
                       widget.usuario.apellido = apellidoController.text;
+                      widget.usuario.descripcion = descripcionController.text;
                     });});
                   },
                   child: Text("Guardar cambios",

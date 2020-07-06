@@ -7,7 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'player_widget.dart';
 import 'package:game/repositorio.dart' as db;
-//import 'package:video_player/video_player.dart';
+import 'package:video_player/video_player.dart';
 
 class MensajeUI extends StatefulWidget {
   final Mensaje mensaje;
@@ -103,7 +103,8 @@ class _MensajeUIState extends State<MensajeUI> {
   }
   
   _montaVideo(Mensaje mensaje) {
-    return /*VideoPlayerWidget(url: "https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4",);*/ Center();
+    return VideoPlayerWidget(url: "https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4",);
+    //Text("Video");
   }
   _montaAlerta(Mensaje mensaje) {
     return Row(

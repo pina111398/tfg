@@ -99,8 +99,8 @@ class _ConversacionesState extends State<Conversaciones> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       ListTile(
-                        title: Text(index==0 ?"* " +
-                              conversaciones[index].para : conversaciones[index].para ,
+                        leading: conversaciones[index].inicio ? Icon(Icons.arrow_right) : null,
+                        title: Text(conversaciones[index].para ,
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                       ),

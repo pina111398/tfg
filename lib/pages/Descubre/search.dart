@@ -211,7 +211,7 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                         titulo: "Humor", busqueda: "semanal", uid: widget.uid),
                     TabSearch(
                       titulo: "Terror",
-                      busqueda: "recientes",
+                      busqueda: "Terror",
                       uid: widget.uid,
                     ),
                     TabSearch(
@@ -226,7 +226,8 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
           : StreamBuilder<QuerySnapshot>(
               stream: Firestore.instance
                   .collection("toobooks/")
-                  .where("titulo", isGreaterThan: notifier.texo)
+                  .where("titulo", isGreaterThanOrEqualTo: notifier.texo)
+                  .where('titulo', isLessThan: notifier.texo +'z')
                   .snapshots(),
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {

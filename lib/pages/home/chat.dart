@@ -50,7 +50,7 @@ class _ChatState extends State<Chat>{
             bloc: _postBloc,
             builder: (BuildContext context, MensajeState state){
               if(state is MensajeSinInicializar){
-                return Center(child: CircularProgressIndicator(),);
+                return Center(child: CircularProgressIndicator(valueColor: new AlwaysStoppedAnimation<Color>(Colors.blue),),);
               }
               if(state is MensajeError){
                 return Center(
@@ -64,16 +64,19 @@ class _ChatState extends State<Chat>{
                   );
                 }
                 return 
-                ListView.builder(
-                    itemBuilder: (BuildContext context, int index) {
-                      return //index >= state.mensajes.length
-                          //? BottomLoader()
-                          /*:*/ MensajeUI(mensaje: state.mensajes[index],esGrupo: widget.conversacion.esGrupo,);
-                    },
-                    itemCount: //state.hasReachedMax
-                      /*?*/ state.mensajes.length,
-                      //: state.mensajes.length + 1,
-                    controller: _scrollController,              
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 32),
+                  child: ListView.builder(
+                      itemBuilder: (BuildContext context, int index) {
+                        return //index >= state.mensajes.length
+                            //? BottomLoader()
+                            /*:*/ MensajeUI(mensaje: state.mensajes[index],esGrupo: widget.conversacion.esGrupo,);
+                      },
+                      itemCount: //state.hasReachedMax
+                        /*?*/ state.mensajes.length,
+                        //: state.mensajes.length + 1,
+                      controller: _scrollController,              
+                  ),
                 );
               }
             },
